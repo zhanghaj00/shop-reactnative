@@ -68,9 +68,13 @@ export let userView = () => {
 export let userLogin = (mobile, password) => {
     let url = urls.kUrlUserLogin;
     let data = {
-        mobile: mobile,
-        password: password
+        phone: mobile,
+        password: password,
+        server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
+
+    var x = Util.toQueryString(data);
+    console.log(x);
     return (dispatch) => {
         dispatch({'type': types.kUserLogin});
         Util.post(url, data,

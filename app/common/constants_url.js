@@ -14,7 +14,8 @@
  */
 
 //const kUrlHost = 'http://local.eleteamapi.ygcr8.com/v1'; //本地服务器
-const kUrlHost = 'http://eleteamapi.ygcr8.com/v1';    //在线服务器
+//const kUrlHost = 'http://eleteamapi.ygcr8.com/v1';    //在线服务器
+const kUrlHost = 'http://192.168.1.10:8080';    //在线服务器
 
 //产品和分类
 export const kUrlCategoryListWithProduct    = kUrlHost + '/category/list-with-product';
@@ -33,7 +34,7 @@ export const kUrlCartAdd                    = kUrlHost + '/cart/add';
 
 //用户
 export const kUrlUserRegister               = kUrlHost + '/user/register';
-export const kUrlUserLogin                  = kUrlHost + '/user/login';
+export const kUrlUserLogin                  = kUrlHost + '/user/toLogin.do';
 export const kUrlUserLogout                 = kUrlHost + '/user/logout';
 
 //预订单
