@@ -79,7 +79,7 @@ export default class HomePage extends Component {
     render() {
         const {homeReducer} = this.props;
         let banners = homeReducer.banners;
-        let articles = homeReducer.articles;
+        let articles = homeReducer.data;
         let sourceData = {'banner': [banners], 'feed': articles};
 
         let sectionIDs = ['banner', 'feed'];

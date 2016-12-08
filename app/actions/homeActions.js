@@ -12,8 +12,10 @@ import * as types from './actionTypes';
 import Util from '../common/utils';
 import * as urls from '../common/constants_url';
 
-export let bannerList = ()=> {
-    let url = urls.kUrlBannerList;
+const COMMONLIMIT = 5;
+
+export let bannerList = (page)=> {
+    let url = urls.kUrlBannerList + '?server=56846a8a2fee49d14901d39cc48b8b2a&page=' + page + '&limit' + COMMONLIMIT;
     return dispatch => {
         // 请求轮播数据
         dispatch({type: types.kBannerList});
@@ -34,8 +36,8 @@ export let bannerList = ()=> {
     }
 };
 
-export let homeListArticles = (page, isLoadMore, isRefreshing, isLoading)=> {
-    let url = urls.kUrlHomeListArticles + '?page=' + page;
+export let homeListRecommend = (page, isLoadMore, isRefreshing, isLoading)=> {
+    let url = urls.kUrlHomeListArticles + '?server=56846a8a2fee49d14901d39cc48b8b2a&page=' + page + '&limit' + COMMONLIMIT;
     return dispatch => {
         dispatch({
             type: types.kHomeListArticles,
@@ -46,11 +48,11 @@ export let homeListArticles = (page, isLoadMore, isRefreshing, isLoading)=> {
 
         return Util.get(url,
             (status, code, message, data, share) => {
-                let articles = [];
+                let recommendData = [];
                 if (status) {
-                    articles = data.articles;
+                    recommendData = data;
                 }
-                dispatch({type:types.kHomeListArticlesReceived, status:status, code:code, message:message, share:share, articles:articles});
+                dispatch({type:types.kHomeListArticlesReceived, status:status, code:code, message:message, share:share, data:recommendData});
             },
             (error) => {
                 dispatch({'type': types.kActionError, 'isLoading':false});
