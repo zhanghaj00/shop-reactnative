@@ -12,7 +12,7 @@ import * as types from './actionTypes';
 import Util from '../common/utils';
 import * as urls from '../common/constants_url';
 
-const COMMONLIMIT = 5;
+const COMMONLIMIT = 4;
 
 export let bannerList = (page)=> {
     let url = urls.kUrlBannerList + '?server=56846a8a2fee49d14901d39cc48b8b2a&page=' + page + '&limit' + COMMONLIMIT;
@@ -52,7 +52,7 @@ export let homeListRecommend = (page, isLoadMore, isRefreshing, isLoading)=> {
                 if (status) {
                     recommendData = data;
                 }
-                dispatch({type:types.kHomeListArticlesReceived, status:status, code:code, message:message, share:share, data:recommendData});
+                dispatch({type:types.kHomeListArticlesReceived, status:status, code:code, message:message, share:share, articles:recommendData});
             },
             (error) => {
                 dispatch({'type': types.kActionError, 'isLoading':false});

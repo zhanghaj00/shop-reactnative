@@ -76,7 +76,6 @@ let Util = {
 
         let fetchOptions = {
             method: 'POST',
-           // body: formData
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -104,16 +103,6 @@ let Util = {
                 failCallback(err);
             });
     },
-    toQueryString:(obj) => {
-        return obj ? Object.keys(obj).sort().map(function (key) {
-            var val = obj[key];
-            if (Array.isArray(val)) {
-                return val.sort().map(function (val2) {
-                    return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
-                }).join('&');
-            }
-            return encodeURIComponent(key) + '=' + encodeURIComponent(val);
-        }).join('&') : '';},
     /**
      * 日志打印
      * @param obj

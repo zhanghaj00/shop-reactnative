@@ -13,7 +13,7 @@ import {
     PixelRatio,
     Platform
 } from 'react-native';
-import Common from '../Commom/constants';
+import Common from '../common/constants';
 
 export default class RecommendText extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ export default class RecommendText extends Component {
         return (
 
             <View style={{flexDirection: 'column', alignItems: 'stretch', justifyContent: 'center',backgroundColor: 'rgb(240, 240, 240)'}}>
-                <View style={{ alignItems: 'center',flexDirection: 'row', backgroundColor: 'rgb(240, 240, 240)', height: this.props.module.moduleTitle !== '' ? 30 : 0 }}>
+                <View style={{ alignItems: 'center',flexDirection: 'row', backgroundColor: 'rgb(240, 240, 240)', height:  0 }}>
                     <View style={{backgroundColor:'red',width:5,height: 0}}>
                     </View>
                     <Text style={{marginLeft:10,fontSize:15 }}></Text>

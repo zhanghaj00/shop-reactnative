@@ -32,7 +32,8 @@ export let userRegister = (mobile, password, code) => {
     let data = {
         mobile: mobile,
         password: password,
-        code: code
+        code: code,
+        server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
     return (dispatch) => {
         dispatch({type: types.kUserRegister});

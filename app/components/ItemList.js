@@ -10,7 +10,7 @@ import {
     ListView,
     PixelRatio
 } from 'react-native';
-import Common from '../Commom/constants';
+import Common from '../common/constants';
 //import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -34,12 +34,12 @@ export default class ItemList extends Component {
                     onPress={()=>{alert('我是12')} }
                     >
                     <Image
-                        source={{ uri: rowDate.image }}
+                        source={{ uri: rowDate.homeImgUrl }}
                         style={styles.rowDateImage}
                         />
-                    <Text numberOfLines={1} style={{ fontSize: 11, width: 100 }}> {rowDate.commodityName}</Text>
+                    <Text numberOfLines={1} style={{ fontSize: 11, width: 100 }}> {rowDate.name}</Text>
 
-                    <Text style={{ color: 'red', fontSize: 15 }}>{'¥' + rowDate.secSkillPrice} </Text>
+                    <Text style={{ color: 'red', fontSize: 15 }}>{'¥' + rowDate.price} </Text>
 
                 </TouchableOpacity>
                 
@@ -54,7 +54,7 @@ export default class ItemList extends Component {
                 <View >
                     <ListView
                         horizontal={true}
-                        dataSource={this.state.dataSource.cloneWithRows(this.props.module.moduleDetail ? this.props.module.moduleDetail : []) }
+                        dataSource={this.state.dataSource.cloneWithRows(this.props.module ? this.props.module : []) }
                         renderRow={this._renderRow}
                         contentContainerStyle={styles.list}
                         enableEmptySections={true}
@@ -71,7 +71,7 @@ export default class ItemList extends Component {
 const styles = StyleSheet.create({
     row: {
         height: 180,
-        width: Common.window.width / 3.5 ,
+        width: Common.window.width / 2 ,
         justifyContent: 'center',
         flex: 1,
         alignItems: 'center',

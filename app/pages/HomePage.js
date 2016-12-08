@@ -21,7 +21,7 @@ import {
     Alert
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import {bannerList, homeListArticles} from '../actions/homeActions';
+import {bannerList, homeListRecommend} from '../actions/homeActions';
 import {appCartCookieIdFromSync} from '../actions/cartActions';
 import {userFromSync} from '../actions/userActions';
 import Common from '../common/constants';
@@ -71,15 +71,15 @@ export default class HomePage extends Component {
         // 交互管理器在任意交互/动画完成之后，允许安排长期的运行工作. 在所有交互都完成之后安排一个函数来运行。
         InteractionManager.runAfterInteractions(() => {
             const {dispatch} = this.props;
-            dispatch(bannerList());
-            dispatch(homeListArticles(page, canLoadMore, isRefreshing, isLoading));
+            dispatch(bannerList(1));
+            dispatch(homeListRecommend(page, canLoadMore, isRefreshing, isLoading));
         });
     }
 
     render() {
         const {homeReducer} = this.props;
         let banners = homeReducer.banners;
-        let articles = homeReducer.data;
+        let articles = homeReducer.articles;
         let sourceData = {'banner': [banners], 'feed': articles};
 
         let sectionIDs = ['banner', 'feed'];
@@ -138,6 +138,7 @@ export default class HomePage extends Component {
         if (sectionID == 'banner') {
             let banners = data;
             return (
+                <View>
                 <Swiper
                     height={200}
                     loop={true}
@@ -150,23 +151,21 @@ export default class HomePage extends Component {
                 >
                     {banners.map((banner) => {
                         return (
-                            <TouchableOpacity key={banner.name} activeOpacity={0.75}>
+                            <TouchableOpacity key={banner.newsId} activeOpacity={0.75}>
                                 <Image
                                     style={styles.bannerImage}
-                                    source={{uri: banner.image}}
+                                    source={{uri: banner.imgUrl}}
                                 />
                             </TouchableOpacity>
                         )
                     })}
                 </Swiper>
+                <RecommendText />
+                </View>
             )
         } else {
-
             return (
-                <View>
-                <RecommendText />
                 <ItemList module={data} {...this.props}/>
-                </View>
             )
         }
     }
@@ -200,8 +199,8 @@ export default class HomePage extends Component {
         const {dispatch} = this.props;
         canLoadMore = false;
         isRefreshing = true;
-        dispatch(homeListArticles(page, canLoadMore, isRefreshing));
-        dispatch(bannerList());
+        dispatch(homeListRecommend(page, canLoadMore, isRefreshing));
+        dispatch(bannerList(page));
     }
 
     // 上拉加载
@@ -209,7 +208,7 @@ export default class HomePage extends Component {
         if (canLoadMore) {
             page++;
             const {dispatch} = this.props;
-            dispatch(homeListArticles(page, canLoadMore, false));
+            dispatch(homeListRecommend(page, canLoadMore, false));
             canLoadMore = false;
         }
     }

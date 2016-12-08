@@ -9,7 +9,7 @@ import {
     ListView,
     PixelRatio
 } from 'react-native';
-import Common from '../Commom/constants';
+import Common from '../common/constants';
 import Swiper from 'react-native-swiper';
 // const propTypes = {
 //   bannerDate: PropTypes.array.isRequired
