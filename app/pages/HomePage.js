@@ -26,6 +26,8 @@ import {appCartCookieIdFromSync} from '../actions/cartActions';
 import {userFromSync} from '../actions/userActions';
 import Common from '../common/constants';
 import SearchHeader from '../components/SearchHeader';
+import RecommendText from '../components/RecommendText';
+import ItemList from '../components/ItemList';
 import LoadMoreFooter from '../components/LoadMoreFooter';
 import ArticleContainer from '../containers/ArticleContainer';
 import Loading from '../components/Loading';
@@ -159,45 +161,12 @@ export default class HomePage extends Component {
                 </Swiper>
             )
         } else {
-            let feedCellStyle = [styles.feedCell];
-            let sourceFontStyle = [styles.sourceFont];
-            let plainContentStyle = [styles.plainContent];
-            let plainPVFontStyle = [styles.plainPVFont];
-            if (data.is_show_image) {
-                feedCellStyle.push({height: 200})
-                sourceFontStyle.push({color: 'white'})
-                plainContentStyle.push({color: 'white'})
-                plainPVFontStyle.push({color: 'white'})
-            }
 
             return (
-                <TouchableOpacity
-                    activeOpacity={0.75}
-                    onPress={this._onPressArticle.bind(this, data)}
-                >
-                    <View style={feedCellStyle}>
-                        {data.is_show_image ?
-                            <Image
-                                style={styles.feedImage}
-                                source={{uri: data.image}}
-                            >
-                                <View style={styles.plainTitleContainer}>
-                                    <Text style={sourceFontStyle}>{data.short_title}</Text>
-                                </View>
-                                <Text style={plainContentStyle}>{data.title}</Text>
-                                <Text style={plainPVFontStyle}>{data.hits}人阅读</Text>
-                            </Image>
-                            :
-                            <View style={styles.plainFeed}>
-                                <View style={styles.plainTitleContainer}>
-                                    <Text style={sourceFontStyle}>{data.short_title}</Text>
-                                </View>
-                                <Text style={plainContentStyle}>{data.title}</Text>
-                                <Text style={plainPVFontStyle}>{data.hits}人阅读</Text>
-                            </View>
-                        }
-                    </View>
-                </TouchableOpacity>
+                <View>
+                <RecommendText />
+                <ItemList module={data} {...this.props}/>
+                </View>
             )
         }
     }

@@ -21,7 +21,7 @@ export let bannerList = ()=> {
             (status, code, message, data, share) => {
                 let banners = [];
                 if (status) {
-                    banners = data.banners;
+                    banners = data
                 }
                 dispatch({type:types.kBannerListReceived, status:status, code:code, message:message, share:share, banners:banners});
             },

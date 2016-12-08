@@ -31,7 +31,7 @@ export default class SearchHeader extends React.Component {
                         style={styles.searchIcon}
                         source={require('../images/ic_search.jpg')}
                     />
-                    <Text style={styles.searchPlaceholder}>请输入食物名称</Text>
+                    <Text style={styles.searchPlaceholder}>请输入商品名称</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.75}
