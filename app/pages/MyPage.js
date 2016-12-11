@@ -295,7 +295,7 @@ export default class MyPage extends Component {
                         height: 50,
                         position: 'relative',
                         backgroundColor: 'white'
-                    }} activeOpacity={0.75} onPress={} >
+                    }} activeOpacity={0.75} onPress={this._openChat.bind(this)} >
                         <Image
                             source={require('../images/kf.png')}
                             style={{width: 30, height: 30, marginLeft: 20}}
