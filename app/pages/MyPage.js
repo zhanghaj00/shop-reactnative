@@ -20,6 +20,7 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     InteractionManager,
+    NativeModules
 } from 'react-native';
 import Common from '../common/constants';
 import commonStyles, {colors} from '../common/commonStyles';
@@ -29,6 +30,8 @@ import TextButton from '../common/TextButton';
 import {userLogout, userFromSync} from '../actions/userActions';
 import LoginContainer from '../containers/LoginContainer';
 // import LoginContainer from '../pages/LoginPage';
+
+const ChatMoudle = NativeModules.reactChatModule;
 
 export default class MyPage extends Component {
     // constructor(props) {
@@ -292,7 +295,7 @@ export default class MyPage extends Component {
                         height: 50,
                         position: 'relative',
                         backgroundColor: 'white'
-                    }} activeOpacity={0.75}>
+                    }} activeOpacity={0.75} onPress={} >
                         <Image
                             source={require('../images/kf.png')}
                             style={{width: 30, height: 30, marginLeft: 20}}
@@ -331,6 +334,10 @@ export default class MyPage extends Component {
         );
     }
 
+    _openChat(){
+        //获取cookie中的 username
+        ChatMoudle.openChatWithAdmin("hello word");
+    }
     _onPressHead() {
         const {userReducer} = this.props;
         const user = userReducer.user;

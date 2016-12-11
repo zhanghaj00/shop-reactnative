@@ -1,13 +1,13 @@
 package com.shopreactnative;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.Context;
 
+import cn.leancloud.chatkit.LCChatKit;
+import com.avos.avoscloud.AVOSCloud;
 import com.facebook.react.ReactApplication;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
@@ -16,6 +16,8 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+
+
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     protected boolean getUseDeveloperSupport() {
@@ -23,11 +25,12 @@ public class MainApplication extends Application implements ReactApplication {
     }
 
     @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
+    protected List<com.facebook.react.ReactPackage> getPackages() {
+      return Arrays.<com.facebook.react.ReactPackage>asList(
           new MainReactPackage(),
             new RNDeviceInfo(),
-          new VectorIconsPackage()
+          new VectorIconsPackage(),
+              new MyReactPackage()
       );
     }
   };
@@ -36,4 +39,21 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
       return mReactNativeHost;
   }
+
+
+    private static Context context  = null ;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        AVOSCloud.initialize(this, "zaeoJsvpr1Do7ufp9D8Ci0BH-gzGzoHsz", "dSM3xn9gnWi0rO02XzNsRVSe");
+       // LCChatKit.getInstance().setProfileProvider(CustomUserProvider.getInstance());
+        LCChatKit.getInstance().init(getApplicationContext(), "", "");
+        context = getApplicationContext();
+    }
+
+
+    public static Context getContext(){
+        return context;
+    }
 }

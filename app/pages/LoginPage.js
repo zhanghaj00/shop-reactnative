@@ -17,6 +17,7 @@ import {
     Image,
     TouchableOpacity,
     InteractionManager,
+    NativeModules
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import Header from '../components/Header';
@@ -24,6 +25,8 @@ import * as Storage from '../common/Storage';
 import RegisterContainer from '../containers/RegisterContainer';
 import {userLogin} from '../actions/userActions';
 import Loading from '../components/Loading';
+
+const AuthMoudle = NativeModules.reactAuthModule;
 
 export default class LoginPage extends Component {
     constructor(props){
@@ -93,10 +96,25 @@ export default class LoginPage extends Component {
                         <Text style={{color:'#62a2e0'}}>立即注册</Text>
                     </TouchableOpacity>
                 </View>
+                <View>
+                    <View>
+                        <TouchableOpacity onPress={this._loginWithWeibo.bind(this)}>
+                            <Text>微博登陆</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity onPress={this._loginWithWeibo.bind(this)}>
+                            <Text>qq登陆</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         )
     }
 
+    _loginWithWeibo(){
+         AuthMoudle.authWeiboActivity();
+    }
     _register() {
         InteractionManager.runAfterInteractions(() => {
             this.props.navigator.push({
