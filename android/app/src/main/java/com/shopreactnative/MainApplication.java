@@ -48,7 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
         AVOSCloud.initialize(this, "zaeoJsvpr1Do7ufp9D8Ci0BH-gzGzoHsz", "dSM3xn9gnWi0rO02XzNsRVSe");
        // LCChatKit.getInstance().setProfileProvider(CustomUserProvider.getInstance());
-        LCChatKit.getInstance().init(getApplicationContext(), "", "");
+        LCChatKit.getInstance().init(getApplicationContext(), "zaeoJsvpr1Do7ufp9D8Ci0BH-gzGzoHsz", "dSM3xn9gnWi0rO02XzNsRVSe");
         context = getApplicationContext();
     }
 
