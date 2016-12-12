@@ -1,6 +1,7 @@
 package com.shopreactnative;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.chatkit.activity.LCIMConversationActivity;
@@ -36,7 +37,11 @@ public class ReactChatModule extends ReactContextBaseJavaModule {
 
                 if (null == e) {
                     Intent intent = new Intent(MainApplication.getContext(), LCIMConversationActivity.class);
+                    Bundle bundle = new Bundle();
+                    intent.putExtras(bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(LCIMConstants.PEER_ID, userName);
+
                     MainApplication.getContext().startActivity(intent);
                 } else {
                     Toast.makeText(MainApplication.getContext(), e.toString(), Toast.LENGTH_SHORT).show();

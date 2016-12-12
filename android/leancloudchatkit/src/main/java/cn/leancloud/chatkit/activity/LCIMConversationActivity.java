@@ -34,6 +34,7 @@ public class LCIMConversationActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+   // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     setContentView(R.layout.lcim_conversation_activity);
     conversationFragment = (LCIMConversationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
     initByIntent(getIntent());
@@ -44,6 +45,18 @@ public class LCIMConversationActivity extends AppCompatActivity {
     super.onNewIntent(intent);
     initByIntent(intent);
   }
+
+ /* @SuppressWarnings("unchecked")
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if (id == android.R.id.home) {
+      finish();
+    }
+    return super.onOptionsItemSelected(item);
+  }*/
+
 
   private void initByIntent(Intent intent) {
     if (null == LCChatKit.getInstance().getClient()) {

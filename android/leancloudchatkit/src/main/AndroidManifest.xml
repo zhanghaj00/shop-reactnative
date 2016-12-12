@@ -13,6 +13,7 @@
     <application>
 
         <activity android:name="cn.leancloud.chatkit.activity.LCIMConversationActivity"
+                  android:label="@string/lcim_message_chat_with_admin"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="cn.leancloud.chatkit.conversation_item_click_action"/>
