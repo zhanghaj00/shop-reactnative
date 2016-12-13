@@ -21,14 +21,6 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AVObject testObject = new AVObject("TestObject");
-        testObject.put("words","Hello World!");
-        testObject.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(AVException e) {
-                if(e == null){
-                }
-            }
-        });
+
     }
 }
