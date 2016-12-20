@@ -78,4 +78,7 @@ export const kAddressDelete                     = 'kAddressDelete';
 export const kAddressDeleteReceived             = 'kAddressDeleteReceived';
 
 
+export const FETCH_CATEGORY_LIST                = 'fetchCateGoryList';
+export const RECEIVE_CATEGORY_LIST              = 'receiveCategoryList';
+
 

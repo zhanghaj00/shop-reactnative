@@ -15,7 +15,13 @@ export let fetchFoods = (kind, value, order_by, page, order_asc, isLoadMore, isL
 
     if (sub_value == undefined) sub_value = '';
 
-    let URL = 'http://food.boohee.com/fb/v1/foods?kind=' + kind + '&value=' + value + '&order_by=' + order_by + '&page=' + page + '&order_asc=' + order_asc + '&sub_value=' + sub_value;
+    let checkKind = "";
+    if(kind==='goodBrand'){
+        checkKind="brandId="+value.brandId;
+    }else{
+        checkKind = "categoryId="+value.categoryId;
+    }
+    let URL = 'http://food.boohee.com/fb/v1/foods?' + checkKind + '&order_by=' + order_by + '&page=' + page + '&order_asc=' + order_asc + '&sub_value=' + sub_value;
 
     return dispatch => {
         dispatch(fetchFoodsList(isLoadMore, isLoading));

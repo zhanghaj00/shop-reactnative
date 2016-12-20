@@ -10,19 +10,20 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import CategoryPage from '../pages/CategoryPage';
+//import CategoryPage from '../pages/CategoryPage';
+import Foods from '../pages/Foods';
 
 class CategoryContainer extends Component {
     render() {
         return (
-            <CategoryPage {...this.props} />
+            <Foods {...this.props} />
         )
     }
 }
 
 export default connect((state) => {
-    const { categoryReducer } = state;
+    const { foodsReducer } = state;
     return {
-        categoryReducer
+        foodsReducer
     }
 })(CategoryContainer);

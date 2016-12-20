@@ -47,8 +47,8 @@ export default class Foods extends React.Component {
 
     render() {
 
-        const {Foods} = this.props;
-        let categoryData = Foods.categoryList;
+        const {foodsReducer} = this.props;
+        let categoryData = foodsReducer.categoryList;
 
         return (
             <View style={{flex: 1}}>
@@ -66,16 +66,7 @@ export default class Foods extends React.Component {
                     }}
                     scanAction={()=>alert('scan')}
                 />
-
-                <CompareCell onPress={()=>{
-                    InteractionManager.runAfterInteractions(()=>{
-                        this.props.navigator.push({
-                            name: 'FoodCompare',
-                            component: FoodCompareContainer,
-                        })
-                    })
-                }}/>
-                {Foods.isLoading ?
+                {foodsReducer.isLoading ?
                     <Loading /> :
                     <ListView
                         dataSource={this.state.dataSource.cloneWithRows(categoryData)}

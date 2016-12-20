@@ -17,8 +17,8 @@ export let fetchCategories = ()=>{
     return dispatch => {
         dispatch(fetchCategoryList());
 
-        Util.get(URL, (response) => {
-            dispatch(receiveCategoryList(response.group));
+        Util.get(URL, (status, code, message, data, share) => {
+            dispatch(receiveCategoryList(data.group));
         }, (error) => {
             console.log('Fetch category list error: ' + error);
             dispatch(receiveCategoryList([])); 
