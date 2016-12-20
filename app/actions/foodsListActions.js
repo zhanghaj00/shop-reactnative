@@ -11,23 +11,20 @@
 import * as types from './actionTypes';
 import Util from '../common/utils';
 
-export let fetchFoods = (kind, value, order_by, page, order_asc, isLoadMore, isLoading, sub_value)=> {
+const LIMIT = 10;
+
+export let fetchFoods = (params,brand, category, order_by, page, order_asc, isLoadMore, isLoading, sub_value)=> {
 
     if (sub_value == undefined) sub_value = '';
 
-    let checkKind = "";
-    if(kind==='goodBrand'){
-        checkKind="brandId="+value.brandId;
-    }else{
-        checkKind = "categoryId="+value.categoryId;
-    }
+    let checkKind = "brandId="+value.brandId + "&categoryId="+category+"&foodTag="+params + "&limit="+LIMIT;
     let URL = 'http://food.boohee.com/fb/v1/foods?' + checkKind + '&order_by=' + order_by + '&page=' + page + '&order_asc=' + order_asc + '&sub_value=' + sub_value;
 
     return dispatch => {
         dispatch(fetchFoodsList(isLoadMore, isLoading));
 
         Util.get(URL, (response) => {
-            dispatch(receiveFoodsList(response.foods))
+            dispatch(receiveFoodsList(response.data))
         }, (error) => {
             console.log('Fetch foods list error: ' + error);
             dispatch(receiveFoodsList([]))

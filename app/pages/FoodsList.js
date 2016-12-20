@@ -66,8 +66,8 @@ export default class FoodsList extends React.Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            const {dispatch, kind, category} = this.props;
-            dispatch(fetchFoods(kind, category, order_by, page, order_asc, canLoadMore, isLoading));
+            const {dispatch, brand, category,params} = this.props;
+            dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading));
             dispatch(fetchSortTypes())
         })
     }
@@ -230,11 +230,11 @@ export default class FoodsList extends React.Component {
     }
 
     fetchData(page, canLoadMore, isLoading) {
-        const {dispatch, kind, category, FoodsList} = this.props;
+        const {dispatch,params, brand, category, FoodsList} = this.props;
         let order_by = FoodsList.currentSortType ? FoodsList.currentSortType.index : 1;
         let order_asc = FoodsList.orderByAsc ? 1 : 0;
         let sub_value = FoodsList.currentSubcategory ? FoodsList.currentSubcategory.id : '';
-        dispatch(fetchFoods(kind, category.id, order_by, page, order_asc, canLoadMore, isLoading, sub_value));
+        dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading, sub_value));
     }
     
     render() {

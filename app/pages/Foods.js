@@ -84,10 +84,10 @@ export default class Foods extends React.Component {
     _renderRow(group) {
 
         let title = '食物分类'
-        if (group.kind == 'brand') {
+        if (group.title == 'goodBrand') {
             title = '热门品牌';
-        } else if (group.kind == 'restaurant') {
-            title = '连锁餐饮';
+        } else if (group.title == 'category') {
+            title = '分类';
         }
 
         return (
@@ -98,7 +98,7 @@ export default class Foods extends React.Component {
                 </View>
                 <View style={styles.categoryContainer}>
                     {
-                        group.categories.map((category) => {
+                        group.list.map((category) => {
                             return (
                                 <TouchableOpacity
                                     key={category.id}
@@ -109,8 +109,8 @@ export default class Foods extends React.Component {
                                                 name: 'FoodsListContainer',
                                                 component: FoodsListContainer,
                                                 passProps: {
-                                                    kind: group.kind,
-                                                    category: category,
+                                                    brand: group.brandId,
+                                                    category: group.categoryId,
                                                 }
                                             })
                                         })
@@ -118,9 +118,9 @@ export default class Foods extends React.Component {
                                 >
                                     <Image
                                         style={styles.categoryIcon}
-                                        source={{uri: category.image_url}}
+                                        source={{uri: category.imgUrl}}
                                     />
-                                    <Text style={styles.categoryTitle}>{category.name}</Text>
+                                    <Text style={styles.categoryTitle}>{category.category?category.category:category.brand}</Text>
                                 </TouchableOpacity>
                             )
                         })
