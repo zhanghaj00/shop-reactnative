@@ -10,15 +10,15 @@
 
 import * as types from './actionTypes';
 import Util from '../common/utils';
-
+import * as urls from '../common/constants_url';
 const LIMIT = 10;
 
 export let fetchFoods = (params,brand, category, order_by, page, order_asc, isLoadMore, isLoading, sub_value)=> {
 
     if (sub_value == undefined) sub_value = '';
 
-    let checkKind = "brandId="+value.brandId + "&categoryId="+category+"&foodTag="+params + "&limit="+LIMIT;
-    let URL = 'http://food.boohee.com/fb/v1/foods?' + checkKind + '&order_by=' + order_by + '&page=' + page + '&order_asc=' + order_asc + '&sub_value=' + sub_value;
+    let checkKind = "&brandId="+value.brandId + "&categoryId="+category+"&foodTag="+params + "&limit="+LIMIT;
+    let URL = urls.kUrlGoodList + urls.kUrlCommonParam + checkKind +  '&page=' + page ;
 
     return dispatch => {
         dispatch(fetchFoodsList(isLoadMore, isLoading));

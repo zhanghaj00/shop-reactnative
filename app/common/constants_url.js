@@ -17,6 +17,8 @@
 //const kUrlHost = 'http://eleteamapi.ygcr8.com/v1';    //在线服务器
 const kUrlHost = 'http://192.168.1.10:8080';    //在线服务器
 
+//统一server参数
+export const kUrlCommonParam              = '?server=56846a8a2fee49d14901d39cc48b8b2a';
 //产品和分类
 export const kUrlCategoryListWithProduct    = kUrlHost + '/category/list-with-product';
 export const kUrlProductView                = kUrlHost + '/product/view?id=';
@@ -50,3 +52,10 @@ export const kUrlOrderIndex                 = kUrlHost + '/order/index';
 export const kUrlAddressList                = kUrlHost + '/address/index';
 export const kUrlAddressCreate              = kUrlHost + '/address/create';
 export const kUrlAddressDelete              = kUrlHost + '/address/delete';
+
+
+//分类
+export const kUrlCategoryList              = kUrlHost + '/service/combineCatalogAndBrand.do';
+
+//列表
+export const kUrlGoodList              = kUrlHost + '/service/selectFoods.do';

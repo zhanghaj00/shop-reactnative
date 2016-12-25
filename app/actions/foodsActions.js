@@ -10,15 +10,16 @@
 
 import * as types from './actionTypes';
 import Util from '../common/utils';
-
+import * as urls from '../common/constants_url';
 export let fetchCategories = ()=>{
-    let URL = 'http://food.boohee.com/fb/v1/categories/list';
+    //let URL = 'http://food.boohee.com/fb/v1/categories/list';
+    let URL = urls.kUrlCategoryList + urls.kUrlCommonParam;
 
     return dispatch => {
         dispatch(fetchCategoryList());
 
         Util.get(URL, (status, code, message, data, share) => {
-            dispatch(receiveCategoryList(data.group));
+            dispatch(receiveCategoryList(data));
         }, (error) => {
             console.log('Fetch category list error: ' + error);
             dispatch(receiveCategoryList([])); 

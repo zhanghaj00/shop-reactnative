@@ -24,7 +24,6 @@ import Common from '../common/constants';
 import SearchHeader from '../components/SearchHeader';
 import Loading from '../components/Loading';
 import FoodsListContainer from '../containers/FoodsListContainer';
-import FoodCompareContainer from '../containers/FoodCompareContainer';
 import SearchContainer from '../containers/SearchContainer';
 
 export default class Foods extends React.Component {
@@ -98,6 +97,7 @@ export default class Foods extends React.Component {
                 </View>
                 <View style={styles.categoryContainer}>
                     {
+
                         group.list.map((category) => {
                             return (
                                 <TouchableOpacity
@@ -109,8 +109,8 @@ export default class Foods extends React.Component {
                                                 name: 'FoodsListContainer',
                                                 component: FoodsListContainer,
                                                 passProps: {
-                                                    brand: group.brandId,
-                                                    category: group.categoryId,
+                                                    brand: category.brandId,
+                                                    category: category.categoryId,
                                                 }
                                             })
                                         })

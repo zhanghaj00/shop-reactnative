@@ -68,7 +68,7 @@ export default class FoodsList extends React.Component {
         InteractionManager.runAfterInteractions(() => {
             const {dispatch, brand, category,params} = this.props;
             dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading));
-            dispatch(fetchSortTypes())
+            //dispatch(fetchSortTypes())
         })
     }
 
