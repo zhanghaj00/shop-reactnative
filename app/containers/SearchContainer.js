@@ -14,8 +14,8 @@ class SearchContainer extends React.Component {
 }
 
 export default connect((state) => {
-    const {Search} = state;
+    const {searchReducer} = state;
     return {
-        Search
+        searchReducer
     }
 })(SearchContainer);

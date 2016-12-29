@@ -23,6 +23,8 @@ import myReducer from './myReducer';
 import userReducer from './userReducer';
 import addressReducer from './addressReducer';
 import commonReducer from './commonReducer';
+import foodsReducer from './foodsReducer';
+import searchReducer from './searchReducer';
 
 export default rootReducer = combineReducers({
     homeReducer,
@@ -35,5 +37,7 @@ export default rootReducer = combineReducers({
     myReducer,
     userReducer,
     addressReducer,
-    commonReducer
+    commonReducer,
+    foodsReducer,
+    searchReducer
 })

@@ -98,18 +98,18 @@ export default class Search extends React.Component {
 
     render() {
 
-        const {Search, dispatch} = this.props;
+        const {searchReducer, dispatch} = this.props;
 
         // 将数据进行分组
         let sectionIDs = [];
         let rowIdentifiers = [];
         let sourceData = null;
 
-        if (Search.history && Search.history.length) {
+        if (searchReducer.history && searchReducer.history.length) {
             sectionIDs.push('history');
 
             let rowID = [];
-            for (let i = 0; i < Search.history.length; i++) {
+            for (let i = 0; i < searchReducer.history.length; i++) {
                 rowID.push(i);
             }
 
@@ -117,20 +117,20 @@ export default class Search extends React.Component {
             rowIdentifiers.push(rowID);
         }
 
-        if (Search.keywordsList && Search.keywordsList.length) {
+        if (searchReducer.keywordsList && searchReducer.keywordsList.length) {
             sectionIDs.push('keywordsList');
             rowIdentifiers.push([0]);
         }
 
-        if (Search.history && Search.history.length) {
-            sourceData = {'history': Search.history, 'keywordsList': [Search.keywordsList]};
+        if (searchReducer.history && searchReducer.history.length) {
+            sourceData = {'history': searchReducer.history, 'keywordsList': [searchReducer.keywordsList]};
         } else {
-            sourceData = {'keywordsList': [Search.keywordsList]};
+            sourceData = {'keywordsList': [searchReducer.keywordsList]};
         }
         return (
             <View style={{flex: 1, backgroundColor: 'white'}}>
                 <View style={{position: 'absolute', top: 44, height: Common.window.height-44-20}}>
-                    {Search.searchText ?
+                    {searchReducer.searchText ?
                         this.renderResultView() :
                         <ListView
                             dataSource={this.state.dataSource.cloneWithRowsAndSections(sourceData, sectionIDs, rowIdentifiers)}
@@ -144,8 +144,8 @@ export default class Search extends React.Component {
                 </View>
                 <SearchInputBar
                     backAction={()=>this.props.navigator.pop()}
-                    searchAction={this.handleSearchText.bind(this, Search.searchText)}
-                    value={Search.searchText}
+                    searchAction={this.handleSearchText.bind(this, searchReducer.searchText)}
+                    value={searchReducer.searchText}
                     onChangeText={(text)=>{
                         dispatch(setupSearchText(text))
                     }}
@@ -235,14 +235,14 @@ export default class Search extends React.Component {
     }
 
     renderResultView() {
-        const {Search, dispatch} = this.props;
-        let topPosition = Search.tags.length > 0 ? 40 : 0;
+        const {searchReducer, dispatch} = this.props;
+        let topPosition = searchReducer.tags.length > 0 ? 40 : 0;
 
         return (
             <View style={{backgroundColor: 'white'}}>
-                {Search.isLoading ? <Loading /> :
+                {searchReducer.isLoading ? <Loading /> :
                     <ListView
-                        dataSource={this.state.resultDataSource.cloneWithRows(Search.searchResultList)}
+                        dataSource={this.state.resultDataSource.cloneWithRows(searchReducer.searchResultList)}
                         renderRow={this.renderResultRow}
                         enableEmptySections={true}
                         onScroll={this.onScroll}
@@ -257,7 +257,7 @@ export default class Search extends React.Component {
                     }}
                     />}
 
-                {Search.showSortTypeView ? this.renderCoverView() : null}
+                {searchReducer.showSortTypeView ? this.renderCoverView() : null}
                 {this.renderSortTypesView()}
                 <ScrollView
                     horizontal={true}
@@ -266,11 +266,11 @@ export default class Search extends React.Component {
                     contentContainerStyle={{height: topPosition, alignItems: 'center'}}
                     style={{width: Common.window.width, backgroundColor: 'white'}}
                 >
-                    {Search.tags.map((tag, i)=> {
+                    {searchReducer.tags.map((tag, i)=> {
 
                         let tagStyle = [styles.tag];
 
-                        if (Search.currentTag && Search.currentTag.name == tag.name) {
+                        if (searchReducer.currentTag && searchReducer.currentTag.name == tag.name) {
                             tagStyle.push({
                                 borderColor: 'red',
                                 color: 'red'
@@ -285,7 +285,7 @@ export default class Search extends React.Component {
                                         page = 1;
                                         canLoadMore = false;
                                         isLoading = true;
-                                        this.fetchData(Search.searchText, page, canLoadMore, isLoading);
+                                        this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
                                     })
                                 }}
                             >
@@ -305,18 +305,18 @@ export default class Search extends React.Component {
 
     // 上拉加载
     onEndReach() {
-        const {Search} = this.props;
+        const {searchReducer} = this.props;
         if (canLoadMore) {
             page++;
             isLoading = false;
-            this.fetchData(Search.searchText, page, canLoadMore, isLoading);
+            this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
             canLoadMore = false;
         }
     }
 
     renderFooter() {
-        const {Search} = this.props;
-        if (Search.isLoadMore) {
+        const {searchReducer} = this.props;
+        if (searchReducer.isLoadMore) {
             return <LoadMoreFooter />
         }
     }
@@ -324,23 +324,19 @@ export default class Search extends React.Component {
     renderResultRow(food) {
         // type: normal or compare
         // comparePosition: Left or Right
-        let { dispatch, type, comparePosition } = this.props;
+        let { dispatch } = this.props;
 
-        let lightStyle = [styles.healthLight];
-        if (food.health_light === 2) {
-            lightStyle.push({backgroundColor: 'orange'})
-        } else if (food.health_light === 3) {
-            lightStyle.push({backgroundColor: 'red'})
-        }
 
-        let foodNameStyle = type === 'normal' ? {width: Common.window.width - 100} : {};
+        lightStyle.push({backgroundColor: 'orange'})
+
+
+        let foodNameStyle = {width: Common.window.width - 100} ;
 
         return (
             <TouchableOpacity
                 style={styles.foodsCell}
                 activeOpacity={0.75}
                 onPress={()=>{
-                    if (type === 'normal') {
                         this.props.navigator.push({
                             name: 'FoodInfoContainer',
                             component: FoodInfoContainer,
@@ -348,10 +344,6 @@ export default class Search extends React.Component {
                                 food: food
                             }
                         })
-                    } else {
-                        dispatch(selectCompareFood(food, comparePosition));
-                        this.props.navigator.pop();
-                    }
                 }}
             >
                 <View style={{flexDirection: 'row'}}>
@@ -364,55 +356,54 @@ export default class Search extends React.Component {
                         </Text>
                     </View>
                 </View>
-                {type === 'normal' ?
-                    <View style={lightStyle}/> :
-                    <View style={styles.addCompare}>
-                        <Text style={{color: 'red'}}> + 加入对比</Text>
-                    </View>
-                }
+                 <View style={lightStyle}/> :
             </TouchableOpacity>
         )
     }
 
     renderSortTypeCell() {
 
-        const {Search, dispatch} = this.props;
-        let sortTypeName = Search.currentSortType ? Search.currentSortType.name : '营养素排序';
+        const {searchReducer, dispatch} = this.props;
+        let sortTypeName = searchReducer.currentSortType ? searchReducer.currentSortType.name : '价格';
 
         // 升降序/是否推荐
         let orderByName;
-        if (Search.currentSortType && Search.currentSortType.name !== '常见') {
-            orderByName = Search.orderByAsc ? '由低到高' : '由高到低';
+        if (searchReducer.currentSortType && searchReducer.currentSortType.name !== '常见') {
+            orderByName = searchReducer.orderByAsc ? '由低到高' : '由高到低';
         } else {
-            orderByName = '推荐食物';
+            orderByName = '由低到高';
         }
-        let orderByAscIconSource= Search.orderByAsc ? {uri: 'ic_food_ordering_up'} : {uri: 'ic_food_ordering_down'};
-        let healthIconName = Search.isHealthLight ? 'check-square' : 'square-o';
+       // let orderByAscIconSource= searchReducer.orderByAsc ? {uri: 'ic_food_ordering_up'} : {uri: 'ic_food_ordering_down'};
+        let orderByAscIconSource= {uri: require('../images/ic_up.png')} ;
+        let healthIconName = 'check-square' ;
 
         return (
             <View style={styles.sortTypeCell}>
                 <TouchableOpacity
-                    style={{flexDirection: 'row'}}
+                    style={{flex:1,flexDirection: 'row',justifyContent: 'center',}}
                     activeOpacity={0.75}
                     onPress={()=>{this.handleSortTypesViewAnimation();}}
                 >
                     <Text>{sortTypeName}</Text>
-                    <Animated.Image
-                        style={{
-                            width: 16,
-                            height: 16,
-                            transform: [{
-                                rotate: this.state.angleRotation.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: ['0deg', '180deg']
-                                })
-                            }]
-                        }}
-                        source={{uri: 'ic_food_ordering'}}
-                    />
+                    <Image style={{width: 13, height: 13,marginTop:5,marginLeft:5}} source={require('../images/ic_down.png')}/>
                 </TouchableOpacity>
-
                 <TouchableOpacity
+                    style={{flex:1,flexDirection: 'row',justifyContent: 'center',}}
+                    activeOpacity={0.75}
+                    onPress={()=>{this.handleSortTypesViewAnimation();}}
+                >
+                    <Text>{sortTypeName}</Text>
+                    <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{flex:1,flexDirection: 'row',justifyContent: 'center',}}
+                    activeOpacity={0.75}
+                    onPress={()=>{this.handleSortTypesViewAnimation();}}
+                >
+                    <Text>{sortTypeName}</Text>
+                    <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
+                </TouchableOpacity>
+                {/*<TouchableOpacity
                     activeOpacity={0.75}
                     onPress={()=>{
                         orderByName === '推荐食物' ? dispatch(changeHealthLight())
@@ -422,7 +413,7 @@ export default class Search extends React.Component {
                                 page = 1;
                                 canLoadMore = false;
                                 isLoading = true;
-                                this.fetchData(Search.searchText, page, canLoadMore, isLoading);
+                                this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
                             })
                         }}
                 >
@@ -433,30 +424,30 @@ export default class Search extends React.Component {
                         </View> :
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{color: 'red'}}>{orderByName}</Text>
-                            <Image style={{width: 16, height: 16}} source={orderByAscIconSource}/>
+                            <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
                         </View>}
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
             </View>
         )
     }
 
     // 排序View动画
     handleSortTypesViewAnimation() {
-        const {Search, dispatch} = this.props;
+        const {searchReducer, dispatch} = this.props;
         Animated.sequence([
             Animated.parallel([
 
                 Animated.timing(this.state.sortTypeViewY, {
-                    toValue: Search.showSortTypeView ? 0 : 1,
+                    toValue: searchReducer.showSortTypeView ? 0 : 1,
                     duration: 500,
                 }),
                 Animated.timing(this.state.angleRotation, {
-                    toValue: Search.showSortTypeView ? 0 : 1,
+                    toValue: searchReducer.showSortTypeView ? 0 : 1,
                     duration: 500,
                 })
             ]),
             Animated.timing(this.state.coverViewOpacity, {
-                toValue: Search.showSortTypeView ? 0 : 1,
+                toValue: searchReducer.showSortTypeView ? 0 : 1,
                 duration: 100,
             })
         ]).start();
@@ -485,10 +476,10 @@ export default class Search extends React.Component {
     }
 
     renderSortTypesView() {
-        const {Search, dispatch} = this.props;
+        const {searchReducer, dispatch} = this.props;
 
         // 根据是否有tag来决定显示位置
-        let topPosition = Search.tags.length > 0 ? 80 : 40;
+        let topPosition = searchReducer.tags.length > 0 ? 80 : 40;
 
         // 这里写死了8行数据
         let height = 8 * (30 + 10) + 10;
@@ -503,12 +494,12 @@ export default class Search extends React.Component {
 
         return (
             <Animated.View style={typesStyle}>
-                {Search.sortTypesList.map((type, i) => {
+                {searchReducer.sortTypesList.map((type, i) => {
                     let sortTypeStyle = [styles.sortType];
                     let titleStyle = [];
 
-                    if ((Search.currentSortType && Search.currentSortType.index === type.index)
-                        || (!Search.currentSortType && i === 0)) {
+                    if ((searchReducer.currentSortType && searchReducer.currentSortType.index === type.index)
+                        || (!searchReducer.currentSortType && i === 0)) {
                         sortTypeStyle.push({
                             borderColor: 'red'
                         });
@@ -527,7 +518,7 @@ export default class Search extends React.Component {
                                     page = 1;
                                     isLoading = true;
                                     canLoadMore = false;
-                                    this.fetchData(Search.searchText, page, canLoadMore, isLoading);
+                                    this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
                                 })
                             }}
                         >
@@ -541,12 +532,12 @@ export default class Search extends React.Component {
 
     // const [page, order_by, order_asc, tags, health_light, isLoadMore, isLoading, health_mode] = params;
     fetchData(keyword, page, canLoadMore, isLoading) {
-        const {dispatch, Search} = this.props;
+        const {dispatch, searchReducer} = this.props;
         //  这两个参数默认不添加,设置null用于判断
-        let order_by = Search.currentSortType ? Search.currentSortType.code : null;
-        let health_light = Search.isHealthLight ? 1 : null;
-        let order_asc = Search.orderByAsc ? 'asc' : 'desc';
-        let tags = Search.currentTag ? Search.currentTag.name : '';
+        let order_by = searchReducer.currentSortType ? searchReducer.currentSortType.code : null;
+        let health_light = searchReducer.isHealthLight ? 1 : null;
+        let order_asc = searchReducer.orderByAsc ? 'asc' : 'desc';
+        let tags = searchReducer.currentTag ? searchReducer.currentTag.name : '';
         dispatch(fetchSearchResults(keyword, page, order_by, order_asc, tags, health_light, canLoadMore, isLoading))
     }
 }
@@ -608,16 +599,16 @@ const styles = StyleSheet.create({
 
     sortTypeCell: {
         flexDirection: 'row',
-        height: 40,
+        height: 50,
         width: Common.window.width,
         borderColor: '#ccc',
         borderBottomWidth: 0.5,
         borderTopWidth: 0.5,
         paddingLeft: 10,
         paddingRight: 10,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
 
 

@@ -82,3 +82,22 @@ export const FETCH_CATEGORY_LIST                = 'fetchCateGoryList';
 export const RECEIVE_CATEGORY_LIST              = 'receiveCategoryList';
 
 
+//搜索
+export const FETCH_KEYWORDS_LIST                ='FETCH_KEYWORDS_LIST';
+export const RECEIVE_KEYWORDS_LIST              ='RECEIVE_KEYWORDS_LIST';
+export const FETCH_SEARCH_RESULT_LIST           ='FETCH_SEARCH_RESULT_LIST';
+export const RECEIVE_SEARCH_RESULT_LIST         ='RECEIVE_SEARCH_RESULT_LIST';
+export const RESET_SEARCH_STATE                 ='RESET_SEARCH_STATE';
+export const SETUP_SEARCH_TEXT                  ='SETUP_SEARCH_TEXT';
+export const CACHE_HISTORY                      ='CACHE_HISTORY';
+export const CLEAR_HISTORY                      ='CLEAR_HISTORY';
+export const CHANGE_SORT_VIEW_STATUS_SEARCH     ='CHANGE_SORT_VIEW_STATUS_SEARCH';
+export const ORDER_ASC_OR_DESC_SEARCH           ='ORDER_ASC_OR_DESC_SEARCH';
+export const CHANGE_HEALTH_LIGHT_SEARCH         ='CHANGE_HEALTH_LIGHT_SEARCH';
+export const SELECT_SORT_TYPE_SEARCH            ='SELECT_SORT_TYPE_SEARCH';
+export const SELECT_FOOD_TAG                    ='SELECT_FOOD_TAG';
+export const FETCH_SORT_TYPES_LIST_SEARCH       ='FETCH_SORT_TYPES_LIST_SEARCH';
+export const RECEIVE_SORT_TYPES_LIST_SEARCH     ='RECEIVE_SORT_TYPES_LIST_SEARCH';
+export const FETCH_FOOD_BRIEF                   ='FETCH_FOOD_BRIEF';
+export const RECEIVE_FOOD_BRIEF                 ='RECEIVE_FOOD_BRIEF';
+export const SELECT_COMPARE_FOOD                ='SELECT_COMPARE_FOOD';

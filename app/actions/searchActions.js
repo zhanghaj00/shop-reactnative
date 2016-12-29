@@ -27,7 +27,7 @@ export let fetchKeywords = ()=> {
                 .then((historyKeywords)=> {
                     let history = historyKeywords ? historyKeywords : [];
 
-                    dispatch(receiveKeywordsList(history, response.keywords));
+                    dispatch(receiveKeywordsList(history));
 
                 });
         }, (error) => {
@@ -184,6 +184,8 @@ export let selectFoodTag = (tag)=> {
     }
 }
 
+
+const sortType = '{"code":"1","name":"综合","index":"1"},{"code":"2","name":"销量","index":"2"},{"code":"3","name":"热度","index":"3"}';
 export let fetchSortTypes = ()=> {
     let URL = 'http://food.boohee.com/fb/v1/foods/sort_types';
 
@@ -191,7 +193,7 @@ export let fetchSortTypes = ()=> {
         dispatch(fetchSortTypesList());
 
         Util.get(URL, (response) => {
-            dispatch(receiveSortTypesList(response.types));
+            dispatch(receiveSortTypesList(sortType));
         }, (error) => {
             console.log('Fetch sort types error: ' + error);
             dispatch(receiveSortTypesList([]))
