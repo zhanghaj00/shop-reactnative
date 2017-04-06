@@ -103,14 +103,6 @@ export default class FoodInfo extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            <View style={{justifyContent: 'space-between', flexDirection: 'row', marginTop: 20}}>
-                                <TouchableOpacity style={styles.addOrCompareItem}>
-                                    <Text style={{color: 'red'}}>+ 添加记录</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.addOrCompareItem}>
-                                    <Text style={{color: 'red'}}>+ 加入对比</Text>
-                                </TouchableOpacity>
-                            </View>
                             <View style={styles.caloryContainer}>
                                 {(fetchedFood && (fetchedFood.compare.target_name || units.length)) ?
                                     <Text>所含热量:</Text> : null}
@@ -126,21 +118,6 @@ export default class FoodInfo extends React.Component {
                                             style={{color: 'gray', fontSize: 13}}>{`${fetchedFood.compare.amount0}${fetchedFood.compare.unit0}${food.name} ≈ ${fetchedFood.compare.amount1}${fetchedFood.compare.target_name}`}</Text>
                                     </View>
                                 </View>}
-                                {units.map((item, i) => {
-                                    return (
-                                        <View key={i} style={styles.unitCell}>
-                                            <Text
-                                                style={{fontSize: 12}}>{`${Math.floor(item.amount)} ${item.unit}`}</Text>
-                                            <View
-                                                style={{flexDirection: 'row', width: 120, justifyContent: 'space-between'}}>
-                                                <Text
-                                                    style={{color: 'gray', fontSize: 12}}>{`${Math.floor(item.weight)} 克`}</Text>
-                                                <Text
-                                                    style={{color: 'gray', fontSize: 12}}>{`${Math.floor(item.calory)} 千卡`}</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                })}
                                 {fetchedFood && fetchedFood.units.length > 2 &&
                                 <TouchableOpacity
                                     activeOpacity={0.75}

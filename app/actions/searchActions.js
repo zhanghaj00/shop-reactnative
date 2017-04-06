@@ -67,17 +67,8 @@ export let fetchSearchResults = (keyword, ...params)=> {
     // 请求参数:q、order_asc、page、order_by、health_mode(血糖)、health_light(推荐)、tags
     // http://food.boohee.com/fb/v1/search?page=1&order_asc=asc&q=&tags=&order_by=calory&health_mode=1
 
-    const [page, order_by, order_asc, isLoadMore, isLoading,brandId,categoryId,foodTag] = params;
+    const [page, order_by, order_asc, canLoadMore, isLoading,brandId,categoryId,foodTag] = params;
 
-    // let URL = 'http://food.boohee.com/fb/v1/search?page=' + page + '&order_asc=' + order_asc + '&q=' + keyword;
-   /* let URL = 'http://food.boohee.com/fb/v1/foods/extra_search?page=' + page +
-        '&order_asc=' + order_asc + '&q=' + keyword + '&tags=' + tags;
-*/
-    //String categoryId,String brandId, String foodTag, Integer page, Integer limit,
-    //Integer sortId,String orderAsc
-
-    let checkKind = "&brandId="+brandId + "&categoryId="+categoryId+"&foodTag="+keyword + "&limit="+LIMIT;
-    //let URL = urls.kUrlGoodList + urls.kUrlCommonParam + checkKind +  '&page=' + page +'&orderAsc='+order_asc+'&sortId'+order_by ;
     let URL = urls.kUrlGoodList ;
 
     console.log(URL)
@@ -89,12 +80,11 @@ export let fetchSearchResults = (keyword, ...params)=> {
         brandId:checkParam(brandId),
         categoryId:checkParam(categoryId),
         sortId:checkParam(order_by),
-        foodTag:checkParam(foodTag),
         limit:LIMIT,
         server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
     return dispatch => {
-        dispatch(fetchSearchResultList(isLoading, isLoadMore));
+        dispatch(fetchSearchResultList(isLoading, canLoadMore));
 
         Util.post(URL, param, (status, code, message, data, share) => {
 
@@ -107,11 +97,11 @@ export let fetchSearchResults = (keyword, ...params)=> {
     }
 }
 
-let fetchSearchResultList = (isLoading, isLoadMore)=> {
+let fetchSearchResultList = (isLoading, canLoadMore)=> {
     return {
         type: types.FETCH_SEARCH_RESULT_LIST,
         isLoading: isLoading,
-        isLoadMore: isLoadMore
+        canLoadMore: canLoadMore
     }
 }
 
@@ -120,7 +110,8 @@ let receiveSearchResultList = (foods,searchText)=> {
         type: types.RECEIVE_SEARCH_RESULT_LIST,
         searchResultList: foods,
         searchText:searchText,
-        isLoading:false
+        isLoading:false,
+        canLoadMore:false
     }
 }
 

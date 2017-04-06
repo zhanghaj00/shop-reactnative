@@ -119,6 +119,7 @@ export default class HomePage extends Component {
                         onEndReachedThreshold={10}
                         renderFooter={this._renderFooter.bind(this)}
                         style={{height: Common.window.height - 64}}
+                        contentContainerStyle={styles.listViewStyle}
                         refreshControl={
                             <RefreshControl
                                 refreshing={homeReducer.isRefreshing}
@@ -165,21 +166,9 @@ export default class HomePage extends Component {
             )
         } else {
             return (
-                <ItemList module={data} {...this.props}/>
+                <ItemList module={{data}} {...this.props}/>
             )
         }
-    }
-
-    _onPressArticle(article) {
-        InteractionManager.runAfterInteractions(() => {
-            this.props.navigator.push({
-                name: 'ArticleContainer',
-                component: ArticleContainer,
-                passProps: {
-                    id: article.id,
-                }
-            })
-        });
     }
 
     _renderFooter() {
@@ -228,7 +217,14 @@ const styles = StyleSheet.create({
         marginRight: 2,
         marginTop: 2,
     },
-
+    listViewStyle:{
+        // 主轴方向
+        flexDirection:'row',
+        // 一行显示不下,换一行
+        flexWrap:'wrap',
+        // 侧轴方向
+        alignItems:'center', // 必须设置,否则换行不起作用
+    },
     customActiveDot: {
         backgroundColor: 'white',
         height: 1.5,

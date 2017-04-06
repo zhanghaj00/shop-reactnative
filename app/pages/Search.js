@@ -142,8 +142,8 @@ export default class Search extends React.Component {
                         this.renderResultView() :
                         <ListView
                             dataSource={this.state.dataSource.cloneWithRowsAndSections(sourceData, sectionIDs, rowIdentifiers)}
-                            renderRow={this.renderRow}
-                            renderSectionHeader={this.renderSectionHeader}
+                            renderRow={this.renderRow.bind(this)}
+                            renderSectionHeader={this.renderSectionHeader.bind(this)}
                             enableEmptySections={true}
                             bounces={false}
                             style={{height: Common.window.height-64, width: Common.window.width}}
@@ -240,22 +240,21 @@ export default class Search extends React.Component {
         let topPosition =  40 ;
 
         return (
-            <View style={{backgroundColor: 'white'}}>
+            <View style={{flex:1,backgroundColor: 'white'}}>
                 {this.renderSortTypeCell()}
                 {searchReducer.isLoading ? <Loading /> :
                     <ListView
                         dataSource={this.state.resultDataSource.cloneWithRows(searchReducer.searchResultList)}
-                        renderRow={this.renderResultRow}
+                        renderRow={this.renderResultRow.bind(this)}
                         enableEmptySections={true}
-                        onScroll={this.onScroll}
+                        onScroll={this.onScroll()}
                         onEndReached={this.onEndReach.bind(this)}
                         onEndReachedThreshold={10}
                         renderFooter={this.renderFooter.bind(this)}
                         style={{
                       position: 'absolute',
-                      top: 40 + topPosition,
-                      height: Common.window.height-64-40-topPosition,
-                      width: Common.window.width
+                      width: Common.window.width,
+                      paddingTop:20
                     }}
                     />}
             </View>
@@ -279,19 +278,14 @@ export default class Search extends React.Component {
 
     renderFooter() {
         const {searchReducer} = this.props;
-        if (searchReducer.isLoadMore) {
+        if (searchReducer.canLoadMore) {
             return <LoadMoreFooter />
         }
     }
 
     renderResultRow(food) {
-        // type: normal or compare
-        // comparePosition: Left or Right
+
         let { dispatch } = this.props;
-
-
-        //lightStyle.push({backgroundColor: 'orange'})
-
 
         let foodNameStyle = {width: Common.window.width - 100} ;
 
@@ -310,12 +304,11 @@ export default class Search extends React.Component {
                 }}
             >
                 <View style={{flexDirection: 'row'}}>
-                    <Image style={styles.foodIcon} source={{uri: food.imgUrl}}/>
+                    <View style={styles.foodIcon}><Image style={styles.foodIcon}source={{uri: food.imgUrl}}/></View>
                     <View style={styles.titleContainer}>
                         <Text style={foodNameStyle} numberOfLines={1}>{food.name}</Text>
                         <Text style={styles.calory}>
-                            {food.name}
-                            <Text style={styles.unit}> 价格：/{food.price}￥</Text>
+                            <Text style={styles.unit}> 价格：{food.price}￥</Text>
                         </Text>
                     </View>
                 </View>
@@ -392,81 +385,6 @@ export default class Search extends React.Component {
         ]).start();
         // 改变排序视图状态
         dispatch(changeSortViewStatus());
-    }
-
-    // 遮盖层
-    renderCoverView() {
-        return (
-            <TouchableOpacity
-                style={{position: 'absolute',top: 80}}
-                activeOpacity={1}
-                onPress={()=>this.handleSortTypesViewAnimation()}
-            >
-                <Animated.View
-                    style={{
-                        width: Common.window.width,
-                        height: Common.window.height - 84,
-                        backgroundColor: 'rgba(131, 131, 131, 0.3)',
-                        opacity: this.state.coverViewOpacity,
-                    }}
-                />
-            </TouchableOpacity>
-        )
-    }
-
-    renderSortTypesView() {
-        const {searchReducer, dispatch} = this.props;
-
-        // 根据是否有tag来决定显示位置
-        let topPosition = searchReducer.tags.length > 0 ? 80 : 40;
-
-        // 这里写死了8行数据
-        let height = 8 * (30 + 10) + 10;
-
-        let typesStyle = [styles.sortTypesView];
-        typesStyle.push({
-            top: this.state.sortTypeViewY.interpolate({
-                inputRange: [0, 1],
-                outputRange: [topPosition - height, topPosition]
-            })
-        })
-
-        return (
-            <Animated.View style={typesStyle}>
-                {searchReducer.sortTypesList.map((type, i) => {
-                    let sortTypeStyle = [styles.sortType];
-                    let titleStyle = [];
-
-                    if ((searchReducer.currentSortType && searchReducer.currentSortType.index === type.index)
-                        || (!searchReducer.currentSortType && i === 0)) {
-                        sortTypeStyle.push({
-                            borderColor: 'red'
-                        });
-                        titleStyle.push({color: 'red'})
-                    }
-
-                    return (
-                        <TouchableOpacity
-                            key={i}
-                            style={sortTypeStyle}
-                            onPress={()=>{
-                                this.handleSortTypesViewAnimation();
-                                dispatch(selectSortType(type));
-
-                                InteractionManager.runAfterInteractions(()=> {
-                                    page = 1;
-                                    isLoading = true;
-                                    canLoadMore = false;
-                                    this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
-                                })
-                            }}
-                        >
-                            <Text style={titleStyle}>{type.name}</Text>
-                        </TouchableOpacity>
-                    )
-                })}
-            </Animated.View>
-        )
     }
 
     // const [page, order_by, order_asc, tags, health_light, isLoadMore, isLoading, health_mode] = params;

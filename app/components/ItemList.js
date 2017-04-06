@@ -18,7 +18,6 @@ export default class ItemList extends Component {
     constructor(props) {
         super(props);
         // console.log(props)
-        this._renderRow = this._renderRow.bind(this);
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
@@ -55,7 +54,7 @@ export default class ItemList extends Component {
                     <ListView
                         horizontal={true}
                         dataSource={this.state.dataSource.cloneWithRows(this.props.module ? this.props.module : []) }
-                        renderRow={this._renderRow}
+                        renderRow={this._renderRow.bind(this)}
                         contentContainerStyle={styles.list}
                         enableEmptySections={true}
                         initialListSize= {4}
@@ -71,9 +70,9 @@ export default class ItemList extends Component {
 const styles = StyleSheet.create({
     row: {
         height: 180,
+        flex:1,
         width: Common.window.width / 2 ,
-        justifyContent: 'center',
-        flex: 1,
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     rowDateImage: {
