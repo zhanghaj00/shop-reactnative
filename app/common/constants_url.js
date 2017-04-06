@@ -15,7 +15,8 @@
 
 //const kUrlHost = 'http://local.eleteamapi.ygcr8.com/v1'; //本地服务器
 //const kUrlHost = 'http://eleteamapi.ygcr8.com/v1';    //在线服务器
-const kUrlHost = 'http://192.168.1.10:8080';    //在线服务器
+export const kUrlHost = 'http://admin.jinyujia.tokyo';    //在线服务器
+//export const kUrlHost = 'http://192.168.1.10:8080';    //在线服务器
 
 //统一server参数
 export const kUrlCommonParam              = '?server=56846a8a2fee49d14901d39cc48b8b2a';

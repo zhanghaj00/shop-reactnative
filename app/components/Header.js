@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: '#ccc',
         borderBottomWidth: 0.5,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        justifyContent:'center'
     },
     titleWrap: {
         flex:1,

@@ -129,6 +129,14 @@ export default class Search extends React.Component {
         }
         return (
             <View style={{flex: 1, backgroundColor: 'white'}}>
+                <SearchInputBar
+                    backAction={()=>this.props.navigator.pop()}
+                    searchAction={this.handleSearchText.bind(this, searchReducer.searchText)}
+                    value={searchReducer.searchText}
+                    onChangeText={(text)=>{
+                        dispatch(setupSearchText(text))
+                    }}
+                />
                 <View style={{position: 'absolute', top: 44, height: Common.window.height-44-20}}>
                     {searchReducer.searchText ?
                         this.renderResultView() :
@@ -142,14 +150,7 @@ export default class Search extends React.Component {
                         />
                     }
                 </View>
-                <SearchInputBar
-                    backAction={()=>this.props.navigator.pop()}
-                    searchAction={this.handleSearchText.bind(this, searchReducer.searchText)}
-                    value={searchReducer.searchText}
-                    onChangeText={(text)=>{
-                        dispatch(setupSearchText(text))
-                    }}
-                />
+
             </View>
         )
     }
@@ -200,7 +201,7 @@ export default class Search extends React.Component {
                         });
                         return (
                             <TouchableOpacity
-                                key={keyword}
+                                key={i}
                                 style={keywordStyle}
                                 activeOpacity={0.75}
                                 onPress={this.handleSearchText.bind(this, keyword)}
@@ -217,7 +218,7 @@ export default class Search extends React.Component {
     handleSearchText(keyword) {
 
         if (!keyword || !keyword.trim().length) {
-            alert('食物名称不能为空!');
+            alert('输入不能为空!');
             return;
         }
 
@@ -236,10 +237,11 @@ export default class Search extends React.Component {
 
     renderResultView() {
         const {searchReducer, dispatch} = this.props;
-        let topPosition = searchReducer.tags.length > 0 ? 40 : 0;
+        let topPosition =  40 ;
 
         return (
             <View style={{backgroundColor: 'white'}}>
+                {this.renderSortTypeCell()}
                 {searchReducer.isLoading ? <Loading /> :
                     <ListView
                         dataSource={this.state.resultDataSource.cloneWithRows(searchReducer.searchResultList)}
@@ -256,45 +258,6 @@ export default class Search extends React.Component {
                       width: Common.window.width
                     }}
                     />}
-
-                {searchReducer.showSortTypeView ? this.renderCoverView() : null}
-                {this.renderSortTypesView()}
-                <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    bounces={false}
-                    contentContainerStyle={{height: topPosition, alignItems: 'center'}}
-                    style={{width: Common.window.width, backgroundColor: 'white'}}
-                >
-                    {searchReducer.tags.map((tag, i)=> {
-
-                        let tagStyle = [styles.tag];
-
-                        if (searchReducer.currentTag && searchReducer.currentTag.name == tag.name) {
-                            tagStyle.push({
-                                borderColor: 'red',
-                                color: 'red'
-                            });
-                        }
-                        return (
-                            <TouchableOpacity
-                                key={i}
-                                onPress={()=>{
-                                    dispatch(selectFoodTag(tag));
-                                    InteractionManager.runAfterInteractions(()=>{
-                                        page = 1;
-                                        canLoadMore = false;
-                                        isLoading = true;
-                                        this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
-                                    })
-                                }}
-                            >
-                                <Text style={tagStyle}>{tag.name}</Text>
-                            </TouchableOpacity>
-                        )
-                    })}
-                </ScrollView>
-                {this.renderSortTypeCell()}
             </View>
         )
     }
@@ -327,7 +290,7 @@ export default class Search extends React.Component {
         let { dispatch } = this.props;
 
 
-        lightStyle.push({backgroundColor: 'orange'})
+        //lightStyle.push({backgroundColor: 'orange'})
 
 
         let foodNameStyle = {width: Common.window.width - 100} ;
@@ -347,16 +310,15 @@ export default class Search extends React.Component {
                 }}
             >
                 <View style={{flexDirection: 'row'}}>
-                    <Image style={styles.foodIcon} source={{uri: food.thumb_image_url}}/>
+                    <Image style={styles.foodIcon} source={{uri: food.imgUrl}}/>
                     <View style={styles.titleContainer}>
                         <Text style={foodNameStyle} numberOfLines={1}>{food.name}</Text>
                         <Text style={styles.calory}>
-                            {food.calory}
-                            <Text style={styles.unit}> 千卡/{food.weight}克</Text>
+                            {food.name}
+                            <Text style={styles.unit}> 价格：/{food.price}￥</Text>
                         </Text>
                     </View>
                 </View>
-                 <View style={lightStyle}/> :
             </TouchableOpacity>
         )
     }
@@ -374,8 +336,10 @@ export default class Search extends React.Component {
             orderByName = '由低到高';
         }
        // let orderByAscIconSource= searchReducer.orderByAsc ? {uri: 'ic_food_ordering_up'} : {uri: 'ic_food_ordering_down'};
-        let orderByAscIconSource= {uri: require('../images/ic_up.png')} ;
+        let orderByAscIconSource=  searchReducer.orderByAsc ? {uri: require('../images/ic_up.png')}: {uri: require('../images/ic_down.png')};
         let healthIconName = 'check-square' ;
+
+        let orderStyle = searchReducer.orderByAsc ? {width: 13, height: 13,marginTop:5,marginLeft:5}:{width: 13, height: 13,marginLeft:5}
 
         return (
             <View style={styles.sortTypeCell}>
@@ -384,15 +348,14 @@ export default class Search extends React.Component {
                     activeOpacity={0.75}
                     onPress={()=>{this.handleSortTypesViewAnimation();}}
                 >
-                    <Text>{sortTypeName}</Text>
-                    <Image style={{width: 13, height: 13,marginTop:5,marginLeft:5}} source={require('../images/ic_down.png')}/>
+                    <Text>综合</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{flex:1,flexDirection: 'row',justifyContent: 'center',}}
                     activeOpacity={0.75}
                     onPress={()=>{this.handleSortTypesViewAnimation();}}
                 >
-                    <Text>{sortTypeName}</Text>
+                    <Text>价格</Text>
                     <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -400,33 +363,9 @@ export default class Search extends React.Component {
                     activeOpacity={0.75}
                     onPress={()=>{this.handleSortTypesViewAnimation();}}
                 >
-                    <Text>{sortTypeName}</Text>
+                    <Text>销量</Text>
                     <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
                 </TouchableOpacity>
-                {/*<TouchableOpacity
-                    activeOpacity={0.75}
-                    onPress={()=>{
-                        orderByName === '推荐食物' ? dispatch(changeHealthLight())
-                              : dispatch(changeOrderAscStatus());
-
-                        InteractionManager.runAfterInteractions(()=>{
-                                page = 1;
-                                canLoadMore = false;
-                                isLoading = true;
-                                this.fetchData(searchReducer.searchText, page, canLoadMore, isLoading);
-                            })
-                        }}
-                >
-                    {orderByName === '推荐食物' ?
-                        <View style={{flexDirection: 'row'}}>
-                            <Icon name={healthIconName} size={16} color="red" />
-                            <Text style={{color: 'red', marginLeft: 5}}>{orderByName}</Text>
-                        </View> :
-                        <View style={{flexDirection: 'row'}}>
-                            <Text style={{color: 'red'}}>{orderByName}</Text>
-                            <Image style={{width: 16, height: 16}} source={require('../images/ic_down.png')}/>
-                        </View>}
-                </TouchableOpacity>*/}
             </View>
         )
     }
@@ -534,11 +473,10 @@ export default class Search extends React.Component {
     fetchData(keyword, page, canLoadMore, isLoading) {
         const {dispatch, searchReducer} = this.props;
         //  这两个参数默认不添加,设置null用于判断
-        let order_by = searchReducer.currentSortType ? searchReducer.currentSortType.code : null;
-        let health_light = searchReducer.isHealthLight ? 1 : null;
-        let order_asc = searchReducer.orderByAsc ? 'asc' : 'desc';
-        let tags = searchReducer.currentTag ? searchReducer.currentTag.name : '';
-        dispatch(fetchSearchResults(keyword, page, order_by, order_asc, tags, health_light, canLoadMore, isLoading))
+        //let order_by = searchReducer.currentSortType ? searchReducer.currentSortType.code : null;
+        let order_by = 1;
+        let order_asc ='asc';
+        dispatch(fetchSearchResults(keyword, page, order_by, order_asc, canLoadMore, isLoading))
     }
 }
 

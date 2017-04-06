@@ -52,7 +52,7 @@ export default class Foods extends React.Component {
         return (
             <View style={{flex: 1}}>
                 <SearchHeader
-                    searchAction={()=>{
+                   searchAction={()=>{
                         InteractionManager.runAfterInteractions(()=>{
                             this.props.navigator.push({
                                 name: 'Search',
@@ -63,7 +63,7 @@ export default class Foods extends React.Component {
                             })
                         })
                     }}
-                    scanAction={()=>alert('scan')}
+                  scanAction={()=>alert('scan')}
                 />
                 {foodsReducer.isLoading ?
                     <Loading /> :
@@ -106,8 +106,8 @@ export default class Foods extends React.Component {
                                     onPress={()=>{
                                         InteractionManager.runAfterInteractions(() => {
                                             this.props.navigator.push({
-                                                name: 'FoodsListContainer',
-                                                component: FoodsListContainer,
+                                                name: 'SearchContainer',
+                                                component: SearchContainer,
                                                 passProps: {
                                                     brand: category.brandId,
                                                     category: category.categoryId,

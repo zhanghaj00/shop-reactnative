@@ -12,28 +12,30 @@ import * as types from './actionTypes';
 import Util from '../common/utils';
 import UserDefaults from '../common/UserDefaults';
 import Common from '../common/constants';
-
+import * as urls from '../common/constants_url';
+const LIMIT = 10;
 // 请求热搜关键词
 export let fetchKeywords = ()=> {
 
-    let URL = 'http://food.boohee.com/fb/v1/keywords';
+    let URL = urls.kUrlHost+'/hotSearch/getHotSearchs.do'+urls.kUrlCommonParam;
 
     return dispatch => {
         dispatch(fetchKeywordsList());
 
-        Util.get(URL, (response) => {
-            // 已缓存的搜索记录
-            UserDefaults.cachedObject(Common.storeKeys.SEARCH_HISTORY_KEY)
-                .then((historyKeywords)=> {
+        fetch(URL)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+                UserDefaults.cachedObject(Common.storeKeys.SEARCH_HISTORY_KEY).
+                then((historyKeywords)=> {
                     let history = historyKeywords ? historyKeywords : [];
-
-                    dispatch(receiveKeywordsList(history));
-
-                });
-        }, (error) => {
-            console.log('Fetch keywords error: ' + error);
-            dispatch(receiveKeywordsList([], []));
-        })
+                    dispatch(receiveKeywordsList(history,result.keywords));
+                })
+            })
+            .catch((err) => {
+                console.log('Fetch keywords error: ' + err);
+                dispatch(receiveKeywordsList([], []));
+            });
     }
 }
 
@@ -51,34 +53,56 @@ let receiveKeywordsList = (history, keywords)=> {
     }
 }
 
+let checkParam = (param) =>{
+    if( param == undefined || param=='null' || param==='undefined' || param === ''){
+        return '';
+    }else{
+        return param;
+    }
+}
+
 // 请求搜索结果
 export let fetchSearchResults = (keyword, ...params)=> {
 
     // 请求参数:q、order_asc、page、order_by、health_mode(血糖)、health_light(推荐)、tags
     // http://food.boohee.com/fb/v1/search?page=1&order_asc=asc&q=&tags=&order_by=calory&health_mode=1
 
-    const [page, order_by, order_asc, tags, health_light, isLoadMore, isLoading, health_mode] = params;
+    const [page, order_by, order_asc, isLoadMore, isLoading,brandId,categoryId,foodTag] = params;
 
     // let URL = 'http://food.boohee.com/fb/v1/search?page=' + page + '&order_asc=' + order_asc + '&q=' + keyword;
-    let URL = 'http://food.boohee.com/fb/v1/foods/extra_search?page=' + page +
+   /* let URL = 'http://food.boohee.com/fb/v1/foods/extra_search?page=' + page +
         '&order_asc=' + order_asc + '&q=' + keyword + '&tags=' + tags;
+*/
+    //String categoryId,String brandId, String foodTag, Integer page, Integer limit,
+    //Integer sortId,String orderAsc
 
-    // 如无参数则不拼接
-    if (order_by) URL += '&order_by=' + order_by;
-    if (health_light) URL += '&health_light=' + health_light;
-    if (health_mode) URL += '&health_mode=' + health_mode;
+    let checkKind = "&brandId="+brandId + "&categoryId="+categoryId+"&foodTag="+keyword + "&limit="+LIMIT;
+    //let URL = urls.kUrlGoodList + urls.kUrlCommonParam + checkKind +  '&page=' + page +'&orderAsc='+order_asc+'&sortId'+order_by ;
+    let URL = urls.kUrlGoodList ;
+
     console.log(URL)
 
+    let param = {
+        page:checkParam(page),
+        orderAsc:checkParam(order_asc),
+        foodTag:checkParam(keyword),
+        brandId:checkParam(brandId),
+        categoryId:checkParam(categoryId),
+        sortId:checkParam(order_by),
+        foodTag:checkParam(foodTag),
+        limit:LIMIT,
+        server:'56846a8a2fee49d14901d39cc48b8b2a'
+    };
     return dispatch => {
         dispatch(fetchSearchResultList(isLoading, isLoadMore));
 
-        Util.get(URL, (response) => {
+        Util.post(URL, param, (status, code, message, data, share) => {
 
-            dispatch(receiveSearchResultList(response.tags, response.foods));
+            dispatch(receiveSearchResultList( data,keyword));
 
         }, (error) => {
             console.log('Fetch search result error: ' + error);
-            dispatch(receiveSearchResultList([], []))
+            dispatch(receiveSearchResultList([]))
         })
     }
 }
@@ -91,11 +115,12 @@ let fetchSearchResultList = (isLoading, isLoadMore)=> {
     }
 }
 
-let receiveSearchResultList = (tags, foods)=> {
+let receiveSearchResultList = (foods,searchText)=> {
     return {
         type: types.RECEIVE_SEARCH_RESULT_LIST,
-        tags: tags,
         searchResultList: foods,
+        searchText:searchText,
+        isLoading:false
     }
 }
 

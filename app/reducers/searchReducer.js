@@ -16,9 +16,7 @@ const initialState = {
     searchText: null,           // 搜索文本
     tags: [],                   // 标签数组
     searchResultList: [],       // 搜索结果
-    sortTypesList: [],          // 营养素数组
-    currentSortType: null,      // 当前营养素
-    currentTag: null,           // 当前tag
+    currentSortType: null,      // 当前搜索sortId
     showSortTypeView: false,    // 显示营养素视图
     orderByAsc: false,          // 升降序
     isHealthLight: false,       // 是否推荐食物
@@ -70,10 +68,6 @@ let searchReducer = (state = initialState, action)=> {
             return Object.assign({}, state, {
                 showSortTypeView: !state.showSortTypeView,
             })
-        case types.RECEIVE_SORT_TYPES_LIST_SEARCH:
-            return Object.assign({}, state, {
-                sortTypesList: action.sortTypesList
-            })
         case types.SELECT_SORT_TYPE_SEARCH:
             return Object.assign({}, state, {
                 currentSortType: action.currentSortType
@@ -85,10 +79,6 @@ let searchReducer = (state = initialState, action)=> {
         case types.CHANGE_HEALTH_LIGHT_SEARCH:
             return Object.assign({}, state, {
                 isHealthLight: !state.isHealthLight
-            })
-        case types.SELECT_FOOD_TAG:
-            return Object.assign({}, state, {
-                currentTag: action.currentTag
             })
         case types.RESET_SEARCH_STATE:
             return initialState

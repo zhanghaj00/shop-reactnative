@@ -13,12 +13,11 @@ import Util from '../common/utils';
 import * as urls from '../common/constants_url';
 const LIMIT = 10;
 
-export let fetchFoods = (params,brand, category, order_by, page, order_asc, isLoadMore, isLoading, sub_value)=> {
+export let fetchFoods = (params,brand, category, order_by, page, order_asc, isLoadMore, isLoading)=> {
 
-    if (sub_value == undefined) sub_value = '';
 
     let checkKind = "&brandId="+value.brandId + "&categoryId="+category+"&foodTag="+params + "&limit="+LIMIT;
-    let URL = urls.kUrlGoodList + urls.kUrlCommonParam + checkKind +  '&page=' + page ;
+    let URL = urls.kUrlGoodList + urls.kUrlCommonParam + checkKind +  '&page=' + page +'&orderAsc='+order_asc+'sortId'+order_by ;
 
     return dispatch => {
         dispatch(fetchFoodsList(isLoadMore, isLoading));

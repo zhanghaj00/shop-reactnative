@@ -4,6 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Search from '../pages/Search';
+//import NewSearch from '../pages/NewSearch';
 
 class SearchContainer extends React.Component {
     render() {

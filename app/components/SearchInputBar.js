@@ -12,6 +12,7 @@ import React from 'react';
 import {
     StyleSheet,
     View,
+    Text,
     TextInput,
     TouchableOpacity,
     Image,
@@ -33,7 +34,7 @@ export default class SearchInputBar extends React.Component {
                 </TouchableOpacity>
                 <TextInput
                     style={styles.textInput}
-                    placeholder='请输入食物名称'
+                    placeholder='请输入名称'
                     {...this.props}
                 />
                 <TouchableOpacity
@@ -41,7 +42,7 @@ export default class SearchInputBar extends React.Component {
                     activeOpacity={0.75}
                     onPress={this.props.searchAction}
                 >
-                    <Image style={{height: 20, width: 20}} source={{uri: 'ic_homepage_search'}}/>
+                    <Text style={{height: 20, width: 20}}>搜索</Text>
                 </TouchableOpacity>
             </View>
         )

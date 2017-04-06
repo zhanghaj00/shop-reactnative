@@ -39,7 +39,7 @@ import FoodInfoContainer from '../containers/FoodInfoContainer';
 
 let page = 1;
 let order_by = 1;
-let order_asc = 0;
+let order_asc = 'asc'
 let canLoadMore = false;
 let isLoading = true;
 
@@ -66,8 +66,8 @@ export default class FoodsList extends React.Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            const {dispatch, brand, category,params} = this.props;
-            dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading));
+            const {dispatch, brand, category,params,canLoadMore,isLoading} = this.props;
+            dispatch(fetchFoods(params,brand, category, order_by, 1, order_asc, canLoadMore, isLoading));
             //dispatch(fetchSortTypes())
         })
     }
@@ -177,10 +177,10 @@ export default class FoodsList extends React.Component {
 
     // 营养素排序Cell
     renderSortTypeCell() {
-        const {FoodsList, dispatch} = this.props;
-        let currentTypeName = FoodsList.currentSortType ? FoodsList.currentSortType.name : '营养素排序';
-        let orderByAscTitle = FoodsList.orderByAsc ? '由低到高' : '由高到低';
-        let orderByAscIconSource = FoodsList.orderByAsc ? {uri: 'ic_food_ordering_up'} : {uri: 'ic_food_ordering_down'};
+        const {FoodsList,order_asc,order_by, dispatch} = this.props;
+        let currentTypeName = '价格排序';
+        let orderByAscTitle = (order_asc == 'asc') ? '由低到高' : '由高到低';
+        let orderByAscIconSource = (order_asc == 'asc') ? {uri: 'ic_food_ordering_up'} : {uri: 'ic_food_ordering_down'};
         return (
             <View style={styles.sortTypeCell}>
                 <TouchableOpacity
@@ -203,24 +203,22 @@ export default class FoodsList extends React.Component {
                         source={{uri: 'ic_food_ordering'}}
                     />
                 </TouchableOpacity>
-                {FoodsList.currentSortType ?
-                    <TouchableOpacity
-                        activeOpacity={0.75}
-                        style={{flexDirection: 'row'}}
-                        onPress={()=>{
-                            dispatch(changeOrderAscStatus());
-                            InteractionManager.runAfterInteractions(()=>{
-                                page = 1;
-                                canLoadMore = false;
-                                isLoading = true;
-                                this.fetchData(page, canLoadMore, isLoading);
-                            })
-                        }}
-                    >
-                        <Text style={{color: 'red'}}>{orderByAscTitle}</Text>
-                        <Image style={{width: 16, height: 16}} source={orderByAscIconSource}/>
-                    </TouchableOpacity> : null
-                }
+                <TouchableOpacity
+                    activeOpacity={0.75}
+                    style={{flexDirection: 'row'}}
+                    onPress={()=> {
+                        dispatch(changeOrderAscStatus());
+                        InteractionManager.runAfterInteractions(()=> {
+                            page = 1;
+                            canLoadMore = false;
+                            isLoading = true;
+                            this.fetchData(page, canLoadMore, isLoading);
+                        })
+                    }}
+                >
+                    <Text style={{color: 'red'}}>{orderByAscTitle}</Text>
+                    <Image style={{width: 16, height: 16}} source={orderByAscIconSource}/>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -230,17 +228,12 @@ export default class FoodsList extends React.Component {
     }
 
     fetchData(page, canLoadMore, isLoading) {
-        const {dispatch,params, brand, category, FoodsList} = this.props;
-        let order_by = FoodsList.currentSortType ? FoodsList.currentSortType.index : 1;
-        let order_asc = FoodsList.orderByAsc ? 1 : 0;
-        let sub_value = FoodsList.currentSubcategory ? FoodsList.currentSubcategory.id : '';
-        dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading, sub_value));
+        const {dispatch,params, brand, category,order_asc ,order_by,FoodsList} = this.props;
+        dispatch(fetchFoods(params,brand, category, order_by, page, order_asc, canLoadMore, isLoading));
     }
     
     render() {
         const {category, FoodsList, dispatch} = this.props;
-        let currentSubcategoryName = FoodsList.currentSubcategory ? FoodsList.currentSubcategory.name : '全部';
-
         let subcategories = [{id: '', name: '全部'}];
         category.sub_categories.forEach((subcategory)=>{
             subcategories.push(subcategory)
@@ -260,55 +253,15 @@ export default class FoodsList extends React.Component {
                         renderFooter={this.renderFooter.bind(this)}
                     />
                 }
-                {FoodsList.showSortTypeView ? this.renderCoverView() : null}
-                {this.renderSortTypesView()}
                 <View style={{position: 'absolute', top: 0}}>
-                    {category.sub_category_count > 0 ?
-                        <Header
-                            leftIcon='angle-left'
-                            leftIconAction={()=>this.props.navigator.pop()}
-                            title={category.name}
-                            rightMenu={currentSubcategoryName}
-                            rightMenuAction={()=>dispatch(changeSubcategoryViewStatus())}
-                        /> :
                         <Header
                             leftIcon='angle-left'
                             leftIconAction={()=>this.props.navigator.pop()}
                             title={category.name}
                         />
-                    }
                     {this.renderSortTypeCell()}
                 </View>
-                {FoodsList.showSubcategoryView ?
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={()=>dispatch(changeSubcategoryViewStatus())}
-                        style={{ height: Common.window.height, width: Common.window.width, top:0}}>
-                        <View style={styles.subcategoryContainer}>
-                            {
-                                subcategories.map((subcategory) => {
-                                    return (
-                                        <TouchableOpacity
-                                            key={subcategory.id}
-                                            style={styles.subcategory}
-                                            onPress={()=>{
-                                                dispatch(selectSubcategory(subcategory));
 
-                                                InteractionManager.runAfterInteractions(()=>{
-                                                    page = 1;
-                                                    canLoadMore = false;
-                                                    isLoading = true;
-                                                    this.fetchData(page, canLoadMore, isLoading);
-                                                })
-                                            }}
-                                        >
-                                            <Text style={{fontSize: 12}}>{subcategory.name}</Text>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-                    </TouchableOpacity> : null }
             </View >
         )
     }
@@ -316,11 +269,7 @@ export default class FoodsList extends React.Component {
     renderRow(food) {
 
         let lightStyle = [styles.healthLight];
-        if (food.health_light == 2) {
-            lightStyle.push({backgroundColor: 'orange'})
-        } else if (food.health_light == 3) {
-            lightStyle.push({backgroundColor: 'red'})
-        }
+        lightStyle.push({backgroundColor: 'orange'})
 
         return (
             <TouchableOpacity
@@ -338,12 +287,11 @@ export default class FoodsList extends React.Component {
                 }}
             >
                 <View style={{flexDirection: 'row'}}>
-                    <Image style={styles.foodIcon} source={{uri: food.thumb_image_url}}/>
+                    <Image style={styles.foodIcon} source={{uri: food.img_url}}/>
                     <View style={styles.titleContainer}>
                         <Text style={styles.foodName} numberOfLines={1}>{food.name}</Text>
                         <Text style={styles.calory}>
-                            {food.calory}
-                            <Text style={styles.unit}> 千卡/{food.weight}克</Text>
+                            <Text style={styles.unit}> 111</Text>
                         </Text>
                     </View>
                 </View>
@@ -351,7 +299,6 @@ export default class FoodsList extends React.Component {
             </TouchableOpacity>
         )
     }
-
     // 上拉加载
     onEndReach() {
         if (canLoadMore) {
