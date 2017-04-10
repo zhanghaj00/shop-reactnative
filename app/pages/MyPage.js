@@ -90,177 +90,6 @@ export default class MyPage extends Component {
                         </TouchableOpacity>
                     </Image>
 
-                    <Text style={{
-                        width: Common.window.width,
-                        height: 40,
-                        position: 'absolute',
-                        padding: 10,
-                        fontSize: 18,
-                        backgroundColor: 'white'
-                    }}>
-                        我的订单
-                    </Text>
-                    <Text
-                        style={{position: 'absolute', padding: 10, fontSize: 18, marginLeft: Common.window.width - 30}}>
-                        >
-                    </Text>
-                    <View style={{
-                        width: Common.window.width,
-                        height: 2 / PixelRatio.get(),
-                        backgroundColor: 'gray',
-                        marginTop: 40
-                    }}>
-                    </View>
-                    <View style={{
-                        padding: 10,
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        backgroundColor: 'white'
-                    }}>
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/moneys.png') }
-                            text={'代付款'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/bus.png') }
-                            text={'物流'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/tosts.png') }
-                            text={'物流'}
-                        />
-
-                    </View>
-
-
-                    <Text style={{
-                        marginTop: 10,
-                        width: Common.window.width,
-                        height: 40,
-                        position: 'absolute',
-                        padding: 10,
-                        fontSize: 18,
-                        backgroundColor: 'white'
-                    }}>
-                        我的钱包
-                    </Text>
-                    <View style={{
-                        width: Common.window.width,
-                        height: 2 / PixelRatio.get(),
-                        backgroundColor: 'gray',
-                        marginTop: 50
-                    }}>
-                    </View>
-
-                    <View style={{
-                        padding: 15,
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        backgroundColor: 'white'
-                    }}>
-                        <TextButton
-
-                            onPress={() => {
-                            } }
-                            text={'物流'}
-                            upText={'0'}
-                        />
-                        <TextButton
-
-                            onPress={() => {
-                            } }
-                            text={'物流'}
-                            upText={'0'}
-                        />
-                        <TextButton
-
-                            onPress={() => {
-                            } }
-                            text={'物流'}
-                            upText={'0'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 20,
-                                height: 20,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/RMB.png') }
-                            text={'优红利'}
-                        />
-                    </View>
-
-                    <View style={{
-                        marginTop: 10,
-                        padding: 15,
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        backgroundColor: 'white'
-                    }}>
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/sc.png') }
-                            text={'我的收藏'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/yj.png') }
-                            text={'浏览记录'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/wh.png') }
-                            text={'帮组中心'}
-                        />
-                        <ImageButton
-                            imageStyle={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            onPress={() => {
-                            } }
-                            imageUrl={require('../images/yjj.png') }
-                            text={'意见反馈'}
-                        />
-
-                    </View>
 
                     <TouchableOpacity style={{
                         marginTop: 10,
@@ -275,7 +104,7 @@ export default class MyPage extends Component {
                             style={{width: 30, height: 30, marginLeft: 20}}
                         />
                         <Text style={{marginLeft: 10}}>
-                            每日签到
+                            我的订单
                         </Text>
                         <Text style={{
                             position: 'absolute',
@@ -301,7 +130,7 @@ export default class MyPage extends Component {
                             style={{width: 30, height: 30, marginLeft: 20}}
                         />
                         <Text style={{marginLeft: 10}}>
-                            联系客服
+                            地址管理
                         </Text>
                         <Text style={{
                             position: 'absolute',
@@ -317,7 +146,7 @@ export default class MyPage extends Component {
                         style={[commonStyles.btn, {marginBottom:20}]}
                         onPress={() => {
                             Alert.alert(
-                                "确定要登录么?",
+                                "确定要退出登录么?",
                                 "",
                                 [
                                     {text:"确定", onPress:()=>{this._logout()}},
@@ -381,7 +210,7 @@ const styles = StyleSheet.create({
     myBgImage: {
         flex: 1,
         width: Common.window.width,
-        height: 100,
+        height: 150,
         justifyContent: 'center',
         alignItems: 'center',
     },

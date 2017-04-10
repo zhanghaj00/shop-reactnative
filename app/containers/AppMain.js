@@ -57,16 +57,6 @@ class AppMain extends Component {
 			    <CartContainer {...this.props}/>
 			  </TabNavigator.Item>
 			  <TabNavigator.Item
-				  title="好玩"
-				  selected={this.state.selectedTab === 'fun'}
-				  selectedTitleStyle={styles.selectedTextStyle}
-				  titleStyle={styles.textStyle}
-				  renderIcon={() => <Image source={require("../images/tab/ic_tab_fun.png")} style={styles.iconStyle}/>}
-				  renderSelectedIcon={() => <Image source={require("../images/tab/ic_tab_fun_press.png")} style={styles.iconStyle}/>}
-				  onPress={() => this.setState({ selectedTab: 'fun' })}>
-				  <FunContainer {...this.props}/>
-			  </TabNavigator.Item>
-			  <TabNavigator.Item
 			  	title="我的"
 			    selected={this.state.selectedTab === 'center'}
 			    selectedTitleStyle={styles.selectedTextStyle}
