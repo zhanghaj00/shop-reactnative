@@ -66,7 +66,7 @@ export default class LoginPage extends Component {
                 <Header
                     leftIcon='angle-left'
                     leftIconAction={()=>this.props.navigator.pop()}
-                    title='手机号登录'
+                    title='登录'
                 />
                 <View style={[styles.formInput, styles.formInputSplit]}>
                     <Image source={require('../images/user.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
@@ -89,22 +89,22 @@ export default class LoginPage extends Component {
                     <Text style={styles.loginText}>登录</Text>
                 </TouchableOpacity>
                 <View style={styles.registerWrap}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={this._forgetPassword.bind(this)}>
-                        <Text style={{color:'#62a2e0'}}>忘记密码?</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{alignItems:'flex-end',flex:1}} onPress={this._register.bind(this)}>
+                    {/*<TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={this._forgetPassword.bind(this)}>*/}
+                        {/*<Text style={{color:'#62a2e0'}}>忘记密码?</Text>*/}
+                    {/*</TouchableOpacity>*/}
+                    <TouchableOpacity style={{alignItems:'center',flex:1}} onPress={this._register.bind(this)}>
                         <Text style={{color:'#62a2e0'}}>立即注册</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <View>
-                        <TouchableOpacity onPress={this._loginWithWeibo.bind(this)}>
-                            <Text>微博登陆</Text>
+                        <TouchableOpacity style={{alignItems:'center',flex:1}} onPress={this._loginWithWeibo.bind(this)}>
+                            <Text style={{color:'#62a2e0'}}>微博登陆</Text>
                         </TouchableOpacity>
                     </View>
                     <View>
-                        <TouchableOpacity onPress={this._loginWithWeibo.bind(this)}>
-                            <Text>qq登陆</Text>
+                        <TouchableOpacity style={{alignItems:'center',flex:1}} onPress={this._loginWithWeibo.bind(this)}>
+                            <Text style={{color:'#62a2e0'}}>qq登陆</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -176,6 +176,7 @@ class RegisterBtn extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#ffffff',
     },
 
     headerWrap: {
