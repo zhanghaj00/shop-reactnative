@@ -66,40 +66,69 @@ export default class ProductPage extends Component {
                 <View style={styles.mainWrap}>
                     {productReducer.isLoading ?
                         <Loading /> :
-                        <ScrollView
-                            bounces={false}
-                            showsVerticalScrollIndicator={false}
-                            style={styles.scrollView}
-                        >
-                            <Swiper
-                                height={200}
-                                loop={true}
-                                autoplay={false}
-                                dot={<View style={styles.customDot} />}
-                                activeDot={<View style={styles.customActiveDot} />}
-                                paginationStyle={{
-                                    bottom: 10
-                                }}
+                        <View style = {styles.container}>
+                            <ScrollView
+                                bounces={false}
+                                showsVerticalScrollIndicator={false}
+                                style={styles.scrollView}
                             >
-                                {images.map((image) => {
-                                    return (
-                                        <TouchableOpacity key={image} activeOpacity={0.75}>
-                                            <Image
-                                                style={styles.productImage}
-                                                source={{uri: image}}
-                                            />
-                                        </TouchableOpacity>
-                                    )
-                                })}
-                            </Swiper>
+                                <Swiper
+                                    height={350}
+                                    loop={true}
+                                    autoplay={false}
+                                    dot={<View style={styles.customDot} />}
+                                    activeDot={<View style={styles.customActiveDot} />}
+                                    paginationStyle={{
+                                        bottom: 10
+                                    }}
+                                >
+                                    {images.map((image) => {
+                                        return (
+                                            <TouchableOpacity key={image} activeOpacity={0.75}>
+                                                <Image
+                                                    style={styles.productImage}
+                                                    source={{uri: image}}
+                                                />
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </Swiper>
+                            </ScrollView>
                             <View style={styles.contentWrap}>
                                 <View style={styles.nameWrap}>
                                     <Text style={styles.name}>{product.name}</Text>
                                     <Text style={styles.price}>{product.price}</Text>
                                 </View>
-                                <Text style={styles.shortDesc}>{product.short_description}</Text>
+                                <View style={styles.nameWrap}>
+                                    <Text style={styles.name}>Size</Text>
+                                    <Text style={styles.price}>{product.backgroundSize}</Text>
+                                </View>
+                                <View style={styles.nameWrap}>
+                                    <Text style={styles.name}>Condition</Text>
+                                    <Text style={styles.price}>{product.fittings?product.fittings:'暂无说明'}</Text>
+                                </View>
+                                <View style={styles.nameWrap}>
+                                    <Text style={styles.name}>Detail</Text>
+                                    <Text style={styles.price}>{product.buyExplain?product.buyExplain:'暂无说明'}</Text>
+                                </View>
+                                <View style={styles.nameWrap}>
+                                    <Text style={styles.name}>Description</Text>
+                                    <View style={{flexDirection: 'row'}}><Text style={styles.price}>{product.buyExplain?product.buyExplain:'暂无说明'}</Text></View>
+                                </View>
+                                <View style={styles.nameWrap}>
+                                    <Text style={styles.name}>模特图片</Text>
+                                    {product.modelPicList?
+                                        product.modelPicList.map((item)=>{
+                                            <Image
+                                                style={styles.productImage}
+                                                source={{uri: item}}
+                                            />
+                                        }):<Text style={styles.price} >"暂无图片"</Text>}
+                                </View>
+
+
                             </View>
-                        </ScrollView>
+                        </View>
                     }
                 </View>
                 <ToolBar {...this.props} />
@@ -177,15 +206,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        flexDirection:'column'
     },
 
     //内容栏
     mainWrap: {
         width: Common.window.width,
-        height: Common.window.height - 64 - 20,
+        height: 440,
     },
     scrollView: {
-        height: Common.window.height - 64 - 20,
+        height: 100,
         backgroundColor: 'rgb(241, 241, 241)',
     },
     contentWrap: {
@@ -194,7 +224,7 @@ const styles = StyleSheet.create({
     },
 
     productImage: {
-        height: 200,
+        height: 400,
         width: Common.window.width,
     },
     customDot: {
@@ -240,11 +270,12 @@ const styles = StyleSheet.create({
 
     // 底部栏
     toolBarWrap: {
-        height: 40,
-        flexDirection: 'row',
+        height: 80,
         alignItems: 'center',
         borderTopColor: '#ccc',
         borderTopWidth: 0.5,
+        flexDirection: 'row',
+        paddingBottom:1
     },
     toolBarItem: {
         flex: 1,
