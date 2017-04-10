@@ -29,6 +29,7 @@ let productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action,
+                product:action.product,
                 isLoading: false,
             };
         default:

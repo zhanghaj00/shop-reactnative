@@ -50,26 +50,17 @@ export let categoryListWithProduct = (isLoading) => {
  * @returns {function(*)}
  */
 export let productView = (product_id, app_cart_cookie_id, access_token) => {
-    let url = urls.kUrlProductView + product_id;
-    let data = {
-        app_cart_cookie_id: app_cart_cookie_id,
-        access_token: access_token,
-    };
+    let URL = urls.kUrlGoodInfo + urls.kUrlCommonParam + "&foodId=" + product_id;
     return (dispatch) => {
         dispatch({'type': types.kProductView, 'isLoading':true});
-        Util.post(url, data,
-            (status, code, message, data, share) => {
-                let product = [];
-                let cart_num = 0;
-                if (status) {
-                    product = data.product;
-                    cart_num = data.cart_num;
-                }
-                dispatch({type:types.kProductViewReceived, status:status, code:code, message:message, share:share, product:product, cart_num:cart_num});
-                dispatch(cartNumFromSync(cart_num));
-            },
-            (error) => {
-                // Alert.alert(error.message);
+        fetch(URL)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+                dispatch({type:types.kProductViewReceived, product:result.food});
+                //dispatch(cartNumFromSync(cart_num));
+            })
+            .catch((err) => {
                 dispatch({'type': types.kActionError, 'isLoading':false, 'error':error});
             });
     }

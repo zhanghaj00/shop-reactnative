@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Common from '../common/constants';
 //import Icon from 'react-native-vector-icons/Ionicons';
-
+import ProductContainer from '../containers/ProductContainer';
 
 export default class ItemList extends Component {
     constructor(props) {
@@ -30,7 +30,15 @@ export default class ItemList extends Component {
             <View style={styles.row}>
                 <TouchableOpacity
                     activeOpacity={0.75}
-                    onPress={()=>{alert('我是12')} }
+                    onPress={()=>{
+                        this.props.navigator.push({
+                            name: 'ProductContainer',
+                            component: ProductContainer,
+                            passProps: {
+                                food: rowDate
+                            }
+                        })
+                    }}
                     >
                     <Image
                         source={{ uri: rowDate.homeImgUrl }}
@@ -44,6 +52,10 @@ export default class ItemList extends Component {
                 
             </View>
         );
+    }
+
+    _pressItem(goodsId){
+
     }
     render() {
 

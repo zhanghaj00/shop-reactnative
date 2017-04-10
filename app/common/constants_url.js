@@ -60,3 +60,6 @@ export const kUrlCategoryList              = kUrlHost + '/service/combineCatalog
 
 //列表
 export const kUrlGoodList              = kUrlHost + '/service/selectFoods.do';
+
+//详情
+export const kUrlGoodInfo              = kUrlHost + '/service/getFoodById.do';
