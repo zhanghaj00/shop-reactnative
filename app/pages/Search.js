@@ -38,13 +38,11 @@ import {
     selectCompareFood,
 } from '../actions/searchActions';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Common from '../common/constants';
 import SearchInputBar from '../components/SearchInputBar';
 import Loading from '../components/Loading';
 import LoadMoreFooter from '../components/LoadMoreFooter';
-import FoodInfoContainer from '../containers/FoodInfoContainer';
-
+import ProductContainer from '../containers/ProductContainer';
 let page = 1;
 let canLoadMore = false;
 let isLoading = true;
@@ -295,8 +293,8 @@ export default class Search extends React.Component {
                 activeOpacity={0.75}
                 onPress={()=>{
                         this.props.navigator.push({
-                            name: 'FoodInfoContainer',
-                            component: FoodInfoContainer,
+                            name: 'ProductContainer',
+                            component: ProductContainer,
                             passProps: {
                                 food: food
                             }

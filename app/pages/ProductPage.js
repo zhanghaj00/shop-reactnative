@@ -33,13 +33,16 @@ import {cartAdd} from '../actions/cartActions';
 import * as Storage from '../common/Storage';
 
 export default class ProductPage extends Component {
+
+
+
     componentDidMount() {
         //交互管理器在任意交互/动画完成之后，允许安排长期的运行工作. 在所有交互都完成之后安排一个函数来运行。
         InteractionManager.runAfterInteractions(() => {
-            const {dispatch, product_id, cartReducer, userReducer} = this.props;
+            const {dispatch, food, cartReducer, userReducer} = this.props;
             let app_cart_cookie_id = cartReducer.app_cart_cookie_id;
             let access_token = userReducer.user.access_token;
-            dispatch(productView(product_id, app_cart_cookie_id, access_token));
+            dispatch(productView(food.foodId, app_cart_cookie_id, access_token));
         });
     }
 
@@ -47,12 +50,10 @@ export default class ProductPage extends Component {
         const {productReducer} = this.props;
         let product = productReducer.product;
         let images = [];
-        if (!productReducer.isLoading){
-            product.app_long_image1.length && images.push(product.app_long_image1);
-            product.app_long_image2.length && images.push(product.app_long_image2);
-            product.app_long_image3.length && images.push(product.app_long_image3);
-            product.app_long_image4.length && images.push(product.app_long_image4);
-            product.app_long_image5.length && images.push(product.app_long_image5);
+        if (productReducer.product.infoList){
+            productReducer.product.infoList.forEach((item)=>{
+                images.push(item);
+            });
         }
 
         return (
@@ -95,7 +96,6 @@ export default class ProductPage extends Component {
                                 <View style={styles.nameWrap}>
                                     <Text style={styles.name}>{product.name}</Text>
                                     <Text style={styles.price}>{product.price}</Text>
-                                    <Text style={styles.featuredPrice}>{product.featured_price}</Text>
                                 </View>
                                 <Text style={styles.shortDesc}>{product.short_description}</Text>
                             </View>
