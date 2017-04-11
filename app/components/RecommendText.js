@@ -38,16 +38,24 @@ export default class RecommendText extends Component {
                     activeOpacity={0.75}
                     style={{ alignItems: 'center' }}
                     >
-                    <Image
-                        source={require('../images/re_commod.jpg')}
-                        style={{ width: Common.window.width , height: Common.window.width *imageHeight/ imageWidth}}
-                        />
+                    <Text style={styles.textLabel}>{'- 推荐商品 -'}</Text>
                 </TouchableOpacity>
             </View>
 
         );
     }
 }
+
+const styles = StyleSheet.create({
+    
+    textLabel: {
+        justifyContent: 'center',
+        marginTop: 12,
+        fontSize: 14,
+        color: '#ff8500',
+        height: 35,
+    }
+});
 
 
 

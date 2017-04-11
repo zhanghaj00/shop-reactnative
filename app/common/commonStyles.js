@@ -62,8 +62,8 @@ const commonStyles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     justifyContent: "center",
-    borderColor: colors.blue,
-    backgroundColor: colors.blue,
+    borderColor: '#ff8500',
+    backgroundColor: '#ff8500',
     borderRadius: 6,
     marginTop:20,
   }

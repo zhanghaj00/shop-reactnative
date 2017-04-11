@@ -14,6 +14,9 @@ import Common from '../common/constants';
 //import Icon from 'react-native-vector-icons/Ionicons';
 import ProductContainer from '../containers/ProductContainer';
 
+var cellWidth = Common.window.width /2;
+var cellHeight = cellWidth + 50;
+
 export default class ItemList extends Component {
     constructor(props) {
         super(props);
@@ -40,13 +43,9 @@ export default class ItemList extends Component {
                         })
                     }}
                     >
-                    <Image
-                        source={{ uri: rowDate.homeImgUrl }}
-                        style={styles.rowDateImage}
-                        />
-                    <Text numberOfLines={1} style={{ fontSize: 11, width: 100 }}> {rowDate.name}</Text>
-
-                    <Text style={{ color: 'red', fontSize: 15 }}>{'¥' + rowDate.price} </Text>
+                    <Image source={{ uri: rowDate.homeImgUrl }} style={styles.rowDateImage}></Image>
+                    <Text numberOfLines={2} style={ styles.nameLabel }> {rowDate.name}</Text>
+                    <Text numberOfLines={1} style={ styles.priceLabel }>{'JPY' + rowDate.price} </Text>
 
                 </TouchableOpacity>
                 
@@ -69,7 +68,7 @@ export default class ItemList extends Component {
                         renderRow={this._renderRow.bind(this)}
                         contentContainerStyle={styles.list}
                         enableEmptySections={true}
-                        initialListSize= {4}
+                        initialListSize= {1}
                         style={styles.listView}
                         />
                 </View>
@@ -80,37 +79,56 @@ export default class ItemList extends Component {
 }
 
 const styles = StyleSheet.create({
+    
     row: {
-        height: 180,
-        flex:1,
-        width: Common.window.width / 2 ,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        flex: 50,
+        width: cellWidth ,
+        height: cellHeight,
+        flexDirection:'row',
     },
     rowDateImage: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 130,
-        width: 100,
+        flexDirection: 'row',
+        resizeMode: 'cover',
+        width: cellWidth - 12,
+        height: cellWidth - 12,
+        
     },
+      nameLabel: {
+        flexDirection: 'row',
+        marginLeft: 12,
+        marginRight: 12,
+        marginTop: 8,
+        fontSize: 13,
+        color: 'black',
+        fontWeight: 'bold',
+        
+    },
+    priceLabel: {
+        flexDirection: 'row',
+        marginLeft: 12,
+        marginRight: 12,
+        marginBottom: 4,
+        fontSize: 12,
+        color: '#ff8500',
+        // backgroundColor: 'red',
+    },
+
     list: {
         justifyContent: 'center',
         flexDirection: 'row',
         alignItems: 'center',
         flexWrap: 'nowrap',
-
     },
-    listView: {
-        backgroundColor: 'white',
-    },
+    
+    
     StyleFor18: {
         flexDirection: 'column',
         backgroundColor: 'black',
     },
-
-    text1: {
-        marginLeft: 10,
+    listView: {
+        backgroundColor: 'white',
     }
+
 });
 
 

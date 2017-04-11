@@ -74,7 +74,7 @@ export default class MyPage extends Component {
                 <ScrollView style={{
                     backgroundColor: 'rgba(240,240,240,0.9)'
                 }}>
-                    <Image style={styles.myBgImage} source={require('../images/img_my_bg.png')}>
+                    <Image style={styles.myBgImage}>
                         <TouchableOpacity
                             style={styles.loginWrap}
                             onPress={this._onPressHead.bind(this)}
@@ -100,8 +100,8 @@ export default class MyPage extends Component {
                         backgroundColor: 'white'
                     }} activeOpacity={0.75}>
                         <Image
-                            source={require('../images/ri.png') }
-                            style={{width: 30, height: 30, marginLeft: 20}}
+                            source={require('../images/personal_orders.png') }
+                            style={{width: 25, height: 25, marginLeft: 12}}
                         />
                         <Text style={{marginLeft: 10}}>
                             我的订单
@@ -126,8 +126,8 @@ export default class MyPage extends Component {
                         backgroundColor: 'white'
                     }} activeOpacity={0.75} onPress={this._openChat.bind(this)} >
                         <Image
-                            source={require('../images/kf.png')}
-                            style={{width: 30, height: 30, marginLeft: 20}}
+                            source={require('../images/personal_address.png')}
+                            style={{width: 25, height: 25, marginLeft: 12}}
                         />
                         <Text style={{marginLeft: 10}}>
                             地址管理
@@ -156,7 +156,7 @@ export default class MyPage extends Component {
                         }}
                         underlayColor={colors.backGray}
                     >
-                        <Text style={[{color: colors.white, fontWeight: "bold",textAlign:"center"}]}> 退出登录 </Text>
+                        <Text style={[{color: colors.white,fontWeight: "bold",textAlign:"center"}]}> 退出登录 </Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
 
     myBgImage: {
         flex: 1,
+        backgroundColor: colors.white,
         width: Common.window.width,
         height: 150,
         justifyContent: 'center',
@@ -224,8 +225,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     login: {
-        borderColor: 'white',
-        color: 'white',
+        borderColor: colors.borderColor,
+        color: colors.black,
         borderWidth: 0.5,
         padding: 5,
         marginTop: 10,

@@ -10,6 +10,7 @@
 
 import React, {Component} from 'react';
 import {
+    Dimensions,
     StyleSheet,
     TouchableOpacity,
     Text,
@@ -38,6 +39,7 @@ let page = 1;
 let canLoadMore = false;
 let isRefreshing = false;
 let isLoading = true;
+var {height, width} = Dimensions.get('window');
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -141,7 +143,7 @@ export default class HomePage extends Component {
             return (
                 <View>
                 <Swiper
-                    height={200}
+                    height={Common.window.width}
                     loop={true}
                     autoplay={true}
                     dot={<View style={styles.customDot} />}
@@ -205,7 +207,7 @@ export default class HomePage extends Component {
 
 const styles = StyleSheet.create({
     bannerImage: {
-        height: 200,
+        height: Common.window.width,
         width: Common.window.width,
     },
 

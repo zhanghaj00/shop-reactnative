@@ -63,7 +63,7 @@ export default class ProductPage extends Component {
                     leftIconAction={()=>this.props.navigator.pop()}
                     title='商品详情'
                 />
-                <View style={styles.mainWrap}>
+                <ScrollView style={styles.mainWrap}>
                     {productReducer.isLoading ?
                         <Loading /> :
                         <View style = {styles.container}>
@@ -97,7 +97,10 @@ export default class ProductPage extends Component {
                             <View style={styles.contentWrap}>
                                 <View style={styles.nameWrap}>
                                     <Text style={styles.name}>{product.name}</Text>
-                                    <Text style={styles.price}>{product.price}</Text>
+                                    <Text style={styles.price}>{'JPY '+product.price}</Text>
+                                </View>
+                                <View style={styles.line}>
+                                    {/*<View style={styles.name}></View>*/}
                                 </View>
                                 <View style={styles.nameWrap}>
                                     <Text style={styles.name}>Size</Text>
@@ -130,7 +133,7 @@ export default class ProductPage extends Component {
                             </View>
                         </View>
                     }
-                </View>
+                </ScrollView>
                 <ToolBar {...this.props} />
             </View>
         )
@@ -212,10 +215,10 @@ const styles = StyleSheet.create({
     //内容栏
     mainWrap: {
         width: Common.window.width,
-        height: 440,
+        height: Common.window.height-108,
     },
     scrollView: {
-        height: 100,
+        height: Common.window.width,
         backgroundColor: 'rgb(241, 241, 241)',
     },
     contentWrap: {
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
     },
 
     productImage: {
-        height: 400,
+        height: Common.window.width,
         width: Common.window.width,
     },
     customDot: {
@@ -245,18 +248,31 @@ const styles = StyleSheet.create({
     },
 
     nameWrap: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         marginTop: 12,
     },
     name: {
-        fontSize: 20,
+        flex: 1,
+        flexDirection: 'column',
+        fontSize: 16,
         color: '#222',
+        marginLeft: 12,
+        marginTop: 4,
     },
     price: {
-        fontSize: 18,
+        flex: 1,
+        flexDirection: 'column',
+        fontSize: 14,
         color: '#FC5500',
-        marginLeft: 50,
+        marginLeft: 12,
+        marginTop: 12,
     },
+    line:{
+        flex: 80,
+        backgroundColor: 'black',
+        height: 5,
+    },
+
     featuredPrice: {
         fontSize: 16,
         color: '#666',
@@ -270,7 +286,7 @@ const styles = StyleSheet.create({
 
     // 底部栏
     toolBarWrap: {
-        height: 80,
+        height: 48,
         alignItems: 'center',
         borderTopColor: '#ccc',
         borderTopWidth: 0.5,

@@ -24,6 +24,16 @@ export default class SearchHeader extends React.Component {
             <View style={styles.headerWrap}>
                 <TouchableOpacity
                     activeOpacity={0.75}
+                    onPress={this.props.scanAction}
+                >
+                    <Image
+                        style={styles.scanIcon}
+                        source={require('../images/ic_scan.jpg')}
+                    />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    activeOpacity={0.75}
                     style={styles.searchInput}
                     onPress={this.props.searchAction}
                 >
@@ -32,15 +42,6 @@ export default class SearchHeader extends React.Component {
                         source={require('../images/ic_search.jpg')}
                     />
                     <Text style={styles.searchPlaceholder}>请输入商品名称</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={0.75}
-                    onPress={this.props.scanAction}
-                >
-                    <Image
-                        style={styles.scanIcon}
-                        source={require('../images/ic_scan.jpg')}
-                    />
                 </TouchableOpacity>
             </View>
         )
@@ -57,10 +58,18 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         height: 44,
     },
+     scanIcon: {
+        flex: 20,
+        marginTop: 7,
+        marginBottom: 7,
+        marginLeft: 12,
+        width: 30,
+        height: 30,
+    },
 
     searchInput: {
+        flex: 80,
         flexDirection: 'row',
-        alignItems: 'center',
         height: 24,
         width: Common.window.width - 30 - 6 * 3,
         marginTop: 16,
@@ -69,12 +78,9 @@ const styles = StyleSheet.create({
     },
 
     searchIcon: {
-        width: 20,
-        height: 20,
-    },
-
-    scanIcon: {
-        marginTop: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 12,
         width: 20,
         height: 20,
     },
