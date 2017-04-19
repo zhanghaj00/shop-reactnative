@@ -17,7 +17,7 @@
     "redux": "^3.5.2",
     "redux-persist": "^2.0.1",
     "redux-thunk": "^2.1.0",
-    "react-native-yunpeng-alipay":""
+    "react-native-smart-alipay":""
   },
   "devDependencies": {
     "redux-devtools": "^3.3.1"

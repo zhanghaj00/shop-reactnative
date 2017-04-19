@@ -35,12 +35,15 @@
         <activity
                 android:name="com.shopreactnative.AuthActivity" >
         </activity>
+        <!-- 支付宝 sdk h5-activity 开始 -->
         <activity
                 android:name="com.alipay.sdk.app.H5PayActivity"
-                android:configChanges="orientation|keyboardHidden|navigation"
+                android:configChanges="orientation|keyboardHidden|navigation|screenSize"
                 android:exported="false"
-                android:screenOrientation="behind" >
+                android:screenOrientation="behind"
+                android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+        <!-- 支付宝 sdk h5-activity 结束 -->
         <activity
                 android:name="com.alipay.sdk.auth.AuthActivity"
                 android:configChanges="orientation|keyboardHidden|navigation"

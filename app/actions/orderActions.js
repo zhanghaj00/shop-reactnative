@@ -47,8 +47,8 @@ export let orderCreate = (cartItems, address, phoneId)=> {
                 }
 
                 //得到簽名  然後調用支付寶
-                console.log("pay")
-                alipay(data.singStr);
+                console.log("pay");
+                alipay(data);
 
 
 
