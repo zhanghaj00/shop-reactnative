@@ -26,6 +26,7 @@ import Common from '../common/constants';
 import Toast from 'react-native-root-toast';
 import {preorderView} from '../actions/preorderActions';
 import {orderCreate} from '../actions/orderActions';
+import {addressList} from '../actions/addressActions';
 import AddressContainer from '../containers/AddressContainer';
 
 export default class PreorderPage extends Component {
@@ -41,12 +42,13 @@ export default class PreorderPage extends Component {
     }
 
     componentDidMount() {
-        const {dispatch, preorderReducer, userReducer} = this.props;
+        const {dispatch, preorderReducer, userReducer,addressReducer} = this.props;
         //交互管理器在任意交互/动画完成之后，允许安排长期的运行工作. 在所有交互都完成之后安排一个函数来运行。
         InteractionManager.runAfterInteractions(() => {
-            let preorder = preorderReducer.preorder;
-            let user = userReducer.user;
-            dispatch(preorderView(preorder.id, user.access_token));
+            let cartItems = preorderReducer.cartItems;
+            let phoneId = userReducer.phoneId;
+            dispatch(preorderView(cartItems,phoneId));
+            dispatch(addressList(phoneId));
         });
     }
 
@@ -61,10 +63,10 @@ export default class PreorderPage extends Component {
 
     render() {
         // alert(1);
-        const {preorderReducer} = this.props;
+        const {preorderReducer,addressReducer} = this.props;
         let isLoading = preorderReducer.isLoading;
-        let preorder = preorderReducer.preorder;
-        let address = preorderReducer.address;
+        let cartItems = preorderReducer.cartItems;
+        let address = addressReducer.address ?addressReducer.address[0]:null;
 
         // 将数据进行分组
         let sectionIds = [];
@@ -75,15 +77,15 @@ export default class PreorderPage extends Component {
             sectionIds.push('address');
             rowIds.push([0]);
             //商品列表数据
-            if(preorder.preorderItems && preorder.preorderItems.length) {
+            if(cartItems && cartItems.length) {
                 let rowIdArr = [];
-                for (let i = 0; i < preorder.preorderItems.length; i++) {
+                for (let i = 0; i < cartItems.length; i++) {
                     rowIdArr.push(i);
                 }
                 sectionIds.push('preorderItems');
                 rowIds.push(rowIdArr);
             }
-            sourceData = {address:[address], preorderItems:preorder.preorderItems};
+            sourceData = {address:[address], preorderItems:cartItems};
         }
 
         return (
@@ -103,7 +105,7 @@ export default class PreorderPage extends Component {
                             enableEmptySections={true}
                         />
                         <View style={styles.toolBarWrap}>
-                            <Text style={styles.cartNum}>￥{preorder.total_price}元</Text>
+                            <Text style={styles.cartNum}>￥{preorderReducer.total_price}元</Text>
                             <TouchableOpacity style={styles.toolBarItem} onPress={this._orderCreate.bind(this)}>
                                 <View style={styles.addToCartWrap}>
                                     <Text style={styles.addToCart}>去支付</Text>
@@ -121,11 +123,19 @@ export default class PreorderPage extends Component {
         if(sectionId == 'address'){
             let address = data;
             return (
-                <TouchableOpacity onPress={this._gotoAddressList.bind(this)}>
-                    <View>
+                <View>
+                    {address ?
+                        <TouchableOpacity onPress={this._gotoAddressList.bind(this)}>
+                            <View>
+                                <Text>收货地址:{address}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        :<TouchableOpacity onPress={this._gotoAddressList.bind(this)}>
+                        <View>
                         <Text>请选择收货地址>></Text>
-                    </View>
-                </TouchableOpacity>
+                        </View>
+                        </TouchableOpacity>}
+                </View>
             )
         }
         //商品列表
@@ -157,12 +167,8 @@ export default class PreorderPage extends Component {
 
     _orderCreate() {
         InteractionManager.runAfterInteractions(() => {
-            const {dispatch, userReducer, preorderReducer} = this.props;
-            let access_token = userReducer.user.access_token;
-            let preorder_id = preorderReducer.preorder.id;
-            let address_id = preorderReducer.address.id;
-            let notice = this.state.notice;
-            dispatch(orderCreate(access_token, preorder_id, address_id, notice));
+            const {dispatch, userReducer, preorderReducer,addressReducer} = this.props;
+            dispatch(orderCreate(preorderReducer.cartItems, addressReducer.address,userReducer.phoneId));
         });
     }
 }

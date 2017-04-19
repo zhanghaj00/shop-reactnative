@@ -32,6 +32,8 @@ import {productView} from '../actions/productActions';
 import {cartAdd} from '../actions/cartActions';
 import * as Storage from '../common/Storage';
 
+import LoginContainer from '../containers/LoginContainer';
+
 export default class ProductPage extends Component {
 
 
@@ -39,10 +41,9 @@ export default class ProductPage extends Component {
     componentDidMount() {
         //交互管理器在任意交互/动画完成之后，允许安排长期的运行工作. 在所有交互都完成之后安排一个函数来运行。
         InteractionManager.runAfterInteractions(() => {
-            const {dispatch, food, cartReducer, userReducer} = this.props;
-            let app_cart_cookie_id = cartReducer.app_cart_cookie_id;
-            let access_token = userReducer.user.access_token;
-            dispatch(productView(food.foodId, app_cart_cookie_id, access_token));
+            const {dispatch, food,foodId, cartReducer, userReducer} = this.props;
+            let phoneId = cartReducer.phoneId;
+            dispatch(productView(food.foodId?food.foodId:foodId, phoneId));
         });
     }
 
@@ -180,17 +181,26 @@ class ToolBar extends Component {
 
     _addToCart() {
         const {dispatch, productReducer, cartReducer, userReducer} = this.props;
-        const product_id = productReducer.product.id;
-        let app_cart_cookie_id = cartReducer.app_cart_cookie_id;
-        let access_token = userReducer.user.access_token;
+        const product_id = productReducer.product.foodId;
+        if(!userReducer.isLoggedIn){
+            InteractionManager.runAfterInteractions(() => {
+                this.props.navigator.push({
+                    name: 'LoginContainer',
+                    component: LoginContainer,
+                    passProps: {...this.props, isShowNavigator:true}
+                })
+            });
+            return;
+        }
+        let phoneId = userReducer.phoneId;
         let count = 1;
         Storage.getAppCartCookieId()
         .then((result)=>{
-            app_cart_cookie_id = result;
+            phoneId = result;
         });
 
         InteractionManager.runAfterInteractions(() => {
-            dispatch(cartAdd(product_id, count, app_cart_cookie_id, access_token));
+            dispatch(cartAdd(phoneId, count,product_id ));
         });
     }
 

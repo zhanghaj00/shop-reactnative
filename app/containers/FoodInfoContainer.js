@@ -19,6 +19,5 @@ class FoodInfoContainer extends React.Component {
 }
 
 export default connect((state)=>{
-    const { FoodInfo } = state;
-    return { FoodInfo };
+    return { foodInfoReducer } = state;
 })(FoodInfoContainer);

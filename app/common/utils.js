@@ -30,6 +30,17 @@ let Util = {
                 failCallback(err);
             });
     },
+    getNew: (url, successCallback, failCallback) => {
+        fetch(url)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+                successCallback(result);
+            })
+            .catch((err) => {
+                failCallback(err);
+            });
+    },
 
     /**
      * http post 请求简单封装
@@ -98,6 +109,43 @@ let Util = {
             .then((responseText) => {
                 let result = JSON.parse(responseText);
                 successCallback(result.status, result.code, result.message, result.data, result.share);
+            })
+            .catch((err) => {
+                failCallback(err);
+            });
+    },
+
+    postNew: (url, data, successCallback, failCallback) => {
+        /* let formData = new FormData();
+         Object.keys(data).map(function(key) {
+         var value = data[key];
+         formData.append(key, value);
+         });*/
+
+        let fetchOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: toQueryString(data)
+        };
+
+        function  toQueryString(obj) {
+            return obj ? Object.keys(obj).sort().map(function (key) {
+                var val = obj[key];
+                if (Array.isArray(val)) {
+                    return val.sort().map(function (val2) {
+                        return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
+                    }).join('&');
+                }
+                return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+            }).join('&') : '';}
+
+        fetch(url, fetchOptions)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+                successCallback(result);
             })
             .catch((err) => {
                 failCallback(err);

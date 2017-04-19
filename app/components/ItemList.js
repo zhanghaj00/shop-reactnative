@@ -38,7 +38,8 @@ export default class ItemList extends Component {
                             name: 'ProductContainer',
                             component: ProductContainer,
                             passProps: {
-                                food: rowDate
+                                food: rowDate,
+                                foodId:rowDate.foodId
                             }
                         })
                     }}

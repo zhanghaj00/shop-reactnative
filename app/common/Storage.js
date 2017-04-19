@@ -35,9 +35,9 @@ export const setUser = (user) => {
 
 export const getAppCartCookieId = () => {
     return AsyncStorage.getItem(kStorageAppCartCookieId)
-        .then((app_cart_cookie_id) => {
-            if (app_cart_cookie_id) {
-                return app_cart_cookie_id;
+        .then((phoneId) => {
+            if (phoneId) {
+                return phoneId;
             } else {
                 return '';
             }
@@ -47,6 +47,6 @@ export const getAppCartCookieId = () => {
         });
 };
 
-export const setAppCartCookieId = (app_cart_cookie_id) => {
-    AsyncStorage.setItem(kStorageAppCartCookieId, app_cart_cookie_id);
+export const setAppCartCookieId = (phoneId) => {
+    AsyncStorage.setItem(kStorageAppCartCookieId, phoneId);
 };

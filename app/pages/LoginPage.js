@@ -23,6 +23,7 @@ import Toast from 'react-native-root-toast';
 import Header from '../components/Header';
 import * as Storage from '../common/Storage';
 import RegisterContainer from '../containers/RegisterContainer';
+import MyContainer from '../containers/MyContainer';
 import {userLogin} from '../actions/userActions';
 import Loading from '../components/Loading';
 
@@ -51,7 +52,7 @@ export default class LoginPage extends Component {
     componentWillUpdate(nextProps, nextState) {
         InteractionManager.runAfterInteractions(() => {
             const {userReducer} = this.props;
-            if (userReducer.user.id) {
+            if (userReducer.phoneId) {
                 this.props.navigator.popToTop();
             }
             if (!userReducer.isLoading && userReducer.status == false) {
@@ -133,7 +134,7 @@ export default class LoginPage extends Component {
 
     _login(){
         let {mobile, password} = this.state;
-
+        let {userReducer} = this.props;
         if (!mobile.length) {
             Toast.show('请输入正确的手机号', {position:Toast.positions.CENTER});
             return;
@@ -146,6 +147,13 @@ export default class LoginPage extends Component {
         InteractionManager.runAfterInteractions(() => {
             const {dispatch} = this.props;
             dispatch(userLogin(mobile, password));
+            /*if(userReducer.isLoggedIn){
+                this.props.navigator.push({
+                    name: 'MyContainer',
+                    component: MyContainer,
+                    passProps: {...this.props, isShowNavigator:true}
+                })
+            }*/
         });
     }
 

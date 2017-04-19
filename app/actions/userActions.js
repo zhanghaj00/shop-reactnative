@@ -30,25 +30,24 @@ export let userFromSync = (user) => {
 export let userRegister = (mobile, password, code) => {
     let url = urls.kUrlUserRegister;
     let data = {
-        mobile: mobile,
+        phone: mobile,
         password: password,
-        code: code,
+        nickname:mobile,
         server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
     return (dispatch) => {
         dispatch({type: types.kUserRegister});
-        Util.post(url, data,
-            (status, code, message, data, share) => {
+        Util.postNew(url, data,
+            (data) => {
                 let user = {};
-                let app_cart_cookie_id = '';
-                if (status) {
-                    user = data.user;
-                    app_cart_cookie_id = data.app_cart_cookie_id;
-                    Storage.setAppCartCookieId(app_cart_cookie_id);
-                    Storage.setUser(user);
+                let phoneId = '';
+                if (data.status) {
+                    phoneId = mobile;
+                    Storage.setAppCartCookieId(phoneId);
+                    Storage.setUser(data.user);
                 }
-                dispatch({type:types.kUserRegisterReceived, status:status, code:code, message:message, user:user, share:share});
-                dispatch(cartView(app_cart_cookie_id, user.access_token));
+                dispatch({type:types.kUserRegisterReceived, status:data.status, message:data.message, user:data.user, phoneId:phoneId});
+                dispatch(cartView(phoneId, user.access_token));
             },
             (error) => {
                 dispatch({'type': types.kActionError});
@@ -73,23 +72,20 @@ export let userLogin = (mobile, password) => {
         password: password,
         server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
-
-    var x = Util.toQueryString(data);
-    console.log(x);
     return (dispatch) => {
         dispatch({'type': types.kUserLogin});
-        Util.post(url, data,
-            (status, code, message, data, share) => {
-                let app_cart_cookie_id = '';
+        Util.postNew(url,data,
+            (data) => {
+                let phoneId = '';
                 let user = {};
-                if (status) {
+                if (data.status) {
                     user = data.user;
-                    app_cart_cookie_id = data.app_cart_cookie_id;
-                    Storage.setAppCartCookieId(app_cart_cookie_id);
+                    phoneId = mobile;
+                    Storage.setAppCartCookieId(phoneId);
                     Storage.setUser(user);
                 }
-                dispatch({type:types.kUserLoginReceived, status:status, code:code, message:message, share:share, user:user, app_cart_cookie_id:app_cart_cookie_id});
-                dispatch(cartView(app_cart_cookie_id, user.access_token));
+                dispatch({type:types.kUserLoginReceived, status:data.status, message:data.message,  user:user, phoneId:phoneId});
+                dispatch(cartView(phoneId));
             },
             (error) => {
                 Alert.alert(error.message);
@@ -104,14 +100,14 @@ export let userLogout = () => {
         dispatch({'type': types.kUserLogout});
         Util.get(url,
             (status, code, message, data, share) => {
-                let app_cart_cookie_id = '';
+                let phoneId = '';
                 if (status) {
-                    app_cart_cookie_id = data.app_cart_cookie_id;
-                    Storage.setAppCartCookieId(app_cart_cookie_id);
+                    phoneId = data.phoneId;
+                    Storage.setAppCartCookieId(phoneId);
                     Storage.setUser({});
                 }
-                dispatch({type:types.kUserLogoutReceived, status:status, code:code, message:message, share:share, app_cart_cookie_id:app_cart_cookie_id, user:{}});
-                dispatch(cartView(app_cart_cookie_id, ''));
+                dispatch({type:types.kUserLogoutReceived, status:status, code:code, message:message, share:share, phoneId:phoneId, user:{}});
+                dispatch(cartView(phoneId, ''));
             },
             (error) => {
                 Alert.alert(error.message);

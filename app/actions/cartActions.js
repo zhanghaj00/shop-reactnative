@@ -19,9 +19,9 @@ import * as Storage from '../common/Storage';
  * @returns {function(*)}
  */
 
-export let appCartCookieIdFromSync = (app_cart_cookie_id) => {
+export let appCartCookieIdFromSync = (phoneId) => {
     return (dispatch) => {
-        dispatch({type:types.kAppCartCookieIdFromSync, app_cart_cookie_id:app_cart_cookie_id});
+        dispatch({type:types.kAppCartCookieIdFromSync, phoneId:phoneId});
     }
 };
 
@@ -31,24 +31,24 @@ export let cartNumFromSync = (cart_num) => {
     }
 };
 
-export let cartView = (app_cart_cookie_id, access_token)=> {
+export let cartView = (phoneId)=> {
     let url = urls.kUrlCart;
     let data = {
-        app_cart_cookie_id: app_cart_cookie_id,
-        access_token: access_token
+        phoneId:phoneId,
+        server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
 
     return dispatch => {
         dispatch({type: types.kCartView});
-        return Util.post(url, data,
-            (status, code, message, data, share) => {
-                let app_cart_cookie_id = '';
+        return Util.postNew(url, data,
+            (data) => {
+                let phoneId = '';
                 let cartItems = [];
-                if (status) {
-                    cartItems = data.cartItems;
-                    app_cart_cookie_id = data.app_cart_cookie_id;
+                if (data.status) {
+                    cartItems = data.orderList;
+                    phoneId = phoneId;
                 }
-                dispatch({type:types.kCartViewReceived, status:status, code:code, message:message, share:share, cartItems:cartItems, app_cart_cookie_id:app_cart_cookie_id});
+                dispatch({type:types.kCartViewReceived, status:data.status,  message:data.message,  cartItems:cartItems, phoneId:phoneId});
             },
             (error) => {
                 // console.log('Fetch banner list error: ' + error);
@@ -58,29 +58,29 @@ export let cartView = (app_cart_cookie_id, access_token)=> {
     }
 };
 
-export let cartAdd = (product_id, count, app_cart_cookie_id, access_token)=> {
+export let cartAdd = (phone_id, goodsCount, foodId)=> {
     let url = urls.kUrlCartAdd;
     let data = {
-        product_id: product_id,
-        count: count,
-        app_cart_cookie_id: app_cart_cookie_id,
-        access_token: access_token,
+        phoneId: phone_id,
+        foodCount:goodsCount ,
+        foodId: foodId,
+        server:'56846a8a2fee49d14901d39cc48b8b2a'
     };
 
     return dispatch => {
         dispatch({type: types.kCartAdd});
-        return Util.post(url, data,
-            (status, code, message, data, share) => {
+        return Util.postNew(url, data,
+            (data) => {
                 let cart_num = 0;
-                let app_cart_cookie_id = app_cart_cookie_id;
-                if (status) {
-                    cart_num = data.cart_num;
-                    app_cart_cookie_id = data.app_cart_cookie_id;
+                let phoneId = phone_id;
+                if (data.status) {
+                    cart_num = 1;
+                    phoneId = phone_id;
                 }
-                Storage.setAppCartCookieId(app_cart_cookie_id);
-                dispatch({type:types.kCartAddReceived, status:status, code:code, message:message, share:share,
-                    cart_num:cart_num, app_cart_cookie_id});
-                dispatch(cartView(app_cart_cookie_id, access_token));
+                Storage.setAppCartCookieId(phoneId);
+                dispatch({type:types.kCartAddReceived, status:data.status, message:data.message,
+                    cart_num:cart_num, phoneId:phone_id});
+                dispatch(cartView(phoneId));
             },
             (error) => {
                 // console.log('Fetch banner list error: ' + error);

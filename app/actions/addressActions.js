@@ -22,23 +22,24 @@ import * as urls from '../common/constants_url';
 //     }
 // };
 
-export let addressList = (access_token)=> {
+export let addressList = (phoneId)=> {
     let url = urls.kUrlAddressList;
     let data = {
-        access_token: access_token
+        phoneId: phoneId,
+        server:urls.kUrlCommonParamStr
     };
 
     return dispatch => {
         dispatch({type: types.kAddressList});
-        return Util.post(url, data,
-            (status, code, message, data, share) => {
+        return Util.postNew(url, data,
+            (data) => {
                 let addresses = [];
-                if (status) {
-                    addresses = data.addresses;
+                if (data.status) {
+                    addresses = data.receivers;
                 } else {
                     dispatch({type:types.kAddressIsToasting, isToasting:true});
                 }
-                dispatch({type:types.kAddressListReceived, status:status, code:code, message:message, share:share,
+                dispatch({type:types.kAddressListReceived, status:data.status, message:message,
                     addresses:addresses});
                 dispatch({type:types.kAddressIsToasting, isToasting:false});
             },

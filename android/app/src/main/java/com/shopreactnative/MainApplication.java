@@ -6,6 +6,7 @@ import android.content.Context;
 import cn.leancloud.chatkit.LCChatKit;
 import com.avos.avoscloud.AVOSCloud;
 import com.facebook.react.ReactApplication;
+import com.yunpeng.alipay.AlipayPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.shell.MainReactPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<com.facebook.react.ReactPackage> getPackages() {
       return Arrays.<com.facebook.react.ReactPackage>asList(
           new MainReactPackage(),
+            new AlipayPackage(),
             new RNDeviceInfo(),
           new VectorIconsPackage(),
               new MyReactPackage()

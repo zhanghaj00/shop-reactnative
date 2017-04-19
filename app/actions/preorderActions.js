@@ -16,28 +16,44 @@ import * as urls from '../common/constants_url';
  * 预订单actions
  */
 
-export let preorderCreate = (access_token)=> {
-    let url = urls.kUrlPreorderCreate;
+export let preorderCreate = (phoneId,itemList)=> {
+    //let url = urls.kUrlPreorderCreate;
+    //let orderId = "";
+    //let totalPrice = 0 ;
+    /*itemList.forEach((item)=>{
+        orderId += (item.orderId + ",");
+        totalPrice = totalPrice + item.price;
+    })
     let data = {
-        access_token: access_token,
-    };
+        phoneId: phoneId,
+        orderId:orderId,
+        totalPrice:totalPrice,
+        message:"支付"
+    };*/
 
     return dispatch => {
         dispatch({type: types.kPreorderCreate});
-        return Util.post(url, data,
-            (status, code, message, data, share) => {
-                let preorder = {};
-                if (status) {
-                    preorder = data.preorder;
+
+        dispatch({type:types.kPreorderCreateReceived, status:true, message:"", phoneId:phoneId,cartItems:itemList});
+
+        /*return Util.postNew(url, data,
+            (data) => {
+                let phoneId = '';
+                let cartItems = [];
+                let togetherId = '';
+                if (data.status) {
+                    cartItems = itemList;
+                    phoneId = phoneId;
+                    togetherId = data.togetherId;
                 }
-                dispatch({type:types.kPreorderCreateReceived, status:status, code:code, message:message, share:share,
-                    preorder:preorder});
+                dispatch({type:types.kPreorderCreateReceived, status:status, message:message,
+                    togetherId:togetherId,phoneId:phoneId,cartItems:cartItems});
             },
             (error) => {
                 // console.log('Fetch banner list error: ' + error);
                 dispatch({'type': types.kActionError});
             }
-        );
+        );*/
     }
 };
 
@@ -47,8 +63,8 @@ export let preorderIsTurnedToViewFromSync = () => {
     }
 };
 
-export let preorderView = (preorder_id, access_token)=> {
-    let url = urls.kUrlPreorderView + preorder_id;
+export let preorderView = (cartItems,phoneId)=> {
+    /*let url = urls.kUrlPreorderView + preorder_id;
     let data = {
         access_token: access_token
     };
@@ -71,5 +87,9 @@ export let preorderView = (preorder_id, access_token)=> {
                 dispatch({'type': types.kActionError});
             }
         );
+    }*/
+    return dispatch => {
+        dispatch({type: types.kPreorderView,cartItems:cartItems,phoneId:phoneId});
+        dispatch({type:types.kPreorderViewReceived});
     }
 };

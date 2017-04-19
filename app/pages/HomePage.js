@@ -62,8 +62,8 @@ export default class HomePage extends Component {
         //从缓存加载数据到对应的state
         const {dispatch} = this.props;
         Storage.getAppCartCookieId()
-        .then((app_cart_cookie_id)=>{
-            dispatch(appCartCookieIdFromSync(app_cart_cookie_id));
+        .then((phoneId)=>{
+            dispatch(appCartCookieIdFromSync(phoneId));
         });
         Storage.getUser()
         .then((user)=>{

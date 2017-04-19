@@ -14,6 +14,7 @@ const initialState = {
     food: undefined,
     isFetchingFood: true,
     isShowAllUnit: false,   // 是否展开所有元素
+    isRefreshing: false,
 }
 
 let foodInfoReducer = (state = initialState, action) => {
@@ -27,10 +28,6 @@ let foodInfoReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 food: action.food,
                 isFetchingFood: false
-            })
-        case types.FOOD_INFO_CHANGE_SHOW_UNITS_STATUS:
-            return Object.assign({}, state, {
-                isShowAllUnit: !state.isShowAllUnit
             })
         default:
             return state

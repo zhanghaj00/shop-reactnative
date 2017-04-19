@@ -296,7 +296,8 @@ export default class Search extends React.Component {
                             name: 'ProductContainer',
                             component: ProductContainer,
                             passProps: {
-                                food: food
+                                food: food,
+                                foodId:food.foodId
                             }
                         })
                 }}

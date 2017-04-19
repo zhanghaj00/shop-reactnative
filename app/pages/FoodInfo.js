@@ -13,172 +13,146 @@ import {
     StyleSheet,
     View,
     Image,
+    ListView,
     Text,
     ScrollView,
     TouchableOpacity,
     InteractionManager,
+    RefreshControl,
+    Swiper
 } from 'react-native';
 import {
     fetchFoodInfo,
-    changeUnitsStatus,
 } from '../actions/foodInfoActions';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../components/Loading';
 import Common from '../common/constants';
 import Header from '../components/Header';
-import FoodAllIngredient from '../pages/FoodAllIngredient';
-
-// 初始显示5个营养元素
-const ingredientProps = ['calory', 'protein', 'fat', 'carbohydrate', 'fiber_dietary'];
 
 export default class FoodInfo extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            dataSource: new ListView.DataSource({
+                getRowData: (data, sectionID, rowID) => {
+                    return data[sectionID][rowID];
+                },
+                getSectionHeaderData: (data, sectionID) => {
+                    return data[sectionID];
+                },
+                rowHasChanged: (row1, row2) => row1 !== row2,
+                sectionHeaderHasChanged: (section1, section2) => section1 !== section2,
+            })
+        }
+    }
     componentDidMount() {
         const {dispatch, food} = this.props;
-        dispatch(fetchFoodInfo(food.code))
+        InteractionManager.runAfterInteractions(()=> {
+            dispatch(fetchFoodInfo(food.foodId));
+        })
     }
 
     render() {
-        const {FoodInfo, food, dispatch} = this.props;
-        let fetchedFood = FoodInfo.food;
-        // 所含热量数组
-        let units = [];
-        if (fetchedFood) {
-            if (fetchedFood.units.length > 2) {
-                if (FoodInfo.isShowAllUnit) {
-                    units = fetchedFood.units;
-                } else {
-                    units = fetchedFood.units.slice(0, 2);
-                }
-            } else {
-                units = fetchedFood.units;
-            }
+        const {foodInfoReducer,dispatch} = this.props;
+
+        if(foodInfoReducer.food){
+            var food = foodInfoReducer.food;
+            var sourceData = {'banner': food.infoList, 'detail': [food]};
+
+            var sectionIDs = ['banner', 'detail'];
+            var rowIDs = [[0]];
+            let row = [];
+            row.push(0);
+            rowIDs.push(row);
+           // var rowIDs;
         }
-
-        let remindTitle = FoodInfo.isShowAllUnit ? '收起' : '展开';
-        let angleName = FoodInfo.isShowAllUnit ? 'angle-up' : 'angle-down';
-
+        let title = foodInfoReducer.food ? foodInfoReducer.food.name : "loading";
         return (
             <View style={styles.container}>
                 <Header
                     leftIcon='angle-left'
                     leftIconAction={()=>this.props.navigator.pop()}
-                    title={food.name}
+                    title={title}
                     rightIcon="heart-o"
                     rightIconAction={()=>alert('like')}
                 />
-                {FoodInfo.isFetchingFood ?
+                {foodInfoReducer.isFetchingFood ?
                     <Loading /> :
-                    <ScrollView
-                        bounces={false}
-                        showsVerticalScrollIndicator={false}
-                        style={styles.scrollView}
-                    >
-                        <View style={styles.headerSection}>
-                            <View style={styles.foodNameHeader}>
-                                <Image
-                                    style={styles.thumbImage}
-                                    source={{uri: FoodInfo.food.thumb_image_url}}
-                                />
-                                <View style={styles.nameContainer}>
-                                    <Text>{FoodInfo.food.name}</Text>
-                                    <View style={styles.foodName}>
-                                        <Text style={{fontSize: 13}}>
-                                            <Text style={{fontSize: 22, fontWeight: 'bold'}}>
-                                                {FoodInfo.food.calory}千卡
-                                            </Text>
-                                            / 每{FoodInfo.food.weight}克
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={styles.units}>
-                                    <TouchableOpacity
-                                        style={{marginRight: 8, height: 25, borderBottomWidth: 1, borderColor: 'red'}}
-                                    >
-                                        <Text>千卡</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <Text>千焦</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <View style={styles.caloryContainer}>
-                                {(fetchedFood && (fetchedFood.compare.target_name || units.length)) ?
-                                    <Text>所含热量:</Text> : null}
-                                {fetchedFood && fetchedFood.compare.target_name && <View style={styles.compareCell}>
-                                    <Image
-                                        style={styles.thumbImage}
-                                        source={{uri: fetchedFood.compare.target_image_url}}
-                                    />
-                                    <View style={{height: 50, justifyContent: 'space-between'}}>
-                                        <Text
-                                            style={{color: 'red', fontSize: 20}}>x {fetchedFood.compare.amount1}</Text>
-                                        <Text
-                                            style={{color: 'gray', fontSize: 13}}>{`${fetchedFood.compare.amount0}${fetchedFood.compare.unit0}${food.name} ≈ ${fetchedFood.compare.amount1}${fetchedFood.compare.target_name}`}</Text>
-                                    </View>
-                                </View>}
-                                {fetchedFood && fetchedFood.units.length > 2 &&
-                                <TouchableOpacity
-                                    activeOpacity={0.75}
-                                    style={styles.statusCell}
-                                    onPress={()=>dispatch(changeUnitsStatus())}
-                                >
-                                    <Icon name={angleName} color="#ccc" size={15}/>
-                                    <Text style={{color: 'gray', fontSize: 13, marginLeft: 10}}>{remindTitle}</Text>
-                                </TouchableOpacity>
-                                }
-                            </View>
-                        </View>
-                        <View style={styles.nutritionsSection}>
-                            <View style={styles.nutritionHeader}>
-                                <Text style={{flex: 2, color:'gray', fontSize: 13}}>营养元素</Text>
-                                <Text style={{flex: 1, color:'gray', fontSize: 13, textAlign: 'right'}}>每100克</Text>
-                                <Text style={{flex: 1, color:'gray', fontSize: 13, textAlign: 'right'}}>备注</Text>
-                            </View>
-                            <View>
-                                {fetchedFood && ingredientProps.map((props, i) => {
-                                    let itemUnit = `${fetchedFood.ingredient[props]} ${Common.ingredientMapper[props].unit}`;
-                                    if (fetchedFood.ingredient[props] === '') {
-                                        itemUnit = '-'
-                                    }
-
-                                    return (
-                                        <View key={i} style={styles.nutritionHeader}>
-                                            <Text
-                                                style={{flex: 2, fontSize: 13}}>{Common.ingredientMapper[props].name}</Text>
-                                            <Text
-                                                style={{flex: 1, fontSize: 13, textAlign: 'right'}}>{itemUnit}</Text>
-                                            <Text style={{flex: 1, fontSize: 13, textAlign: 'right', color: 'red'}}>{fetchedFood.lights[props]}</Text>
-                                        </View>
-                                    )
-                                })}
-                                <TouchableOpacity
-                                    activeOpacity={0.75}
-                                    style={styles.statusCell}
-                                    onPress={()=>{
-                                        InteractionManager.runAfterInteractions(() => {
-                                            this.props.navigator.push({
-                                                name: 'FoodAllIngredient',
-                                                component: FoodAllIngredient,
-                                                passProps: {
-                                                    food: fetchedFood
-                                                }
-                                            })
-                                        })
-                                    }}
-                                >
-                                    <Text style={{fontSize: 13, color: 'gray'}}>更多营养元素</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </ScrollView>
+                    <ListView
+                        dataSource={this.state.dataSource.cloneWithRowsAndSections(sourceData, sectionIDs, rowIDs)}
+                        renderRow={this._renderRow.bind(this)}
+                        initialListSize={1}
+                        enableEmptySections={true}
+                        onScroll={this._onScroll.bind(this)}
+                        onEndReached={this._onEndReach.bind(this)}
+                        onEndReachedThreshold={10}
+                        renderFooter={this._renderFooter.bind(this)}
+                        style={{height: Common.window.height - 64}}
+                        contentContainerStyle={styles.listViewStyle}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={foodInfoReducer.isRefreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                                title="正在加载中……"
+                                color="#ccc"
+                            />
+                        }
+                    />
                 }
                 <View style={styles.toolBar}>
 
                 </View>
             </View>
         )
+    }
+
+    _renderRow(data, sectionID, rowID) {
+        if (sectionID == 'banner') {
+            let banners = data;
+            return (
+                <View>
+                    <Swiper
+                        height={200}
+                        loop={true}
+                        autoplay={true}
+                        dot={<View style={styles.customDot} />}
+                        activeDot={<View style={styles.customActiveDot} />}
+                        paginationStyle={{
+                            bottom: 10
+                        }}
+                    >
+                        {banners.map((banner) => {
+                            return (
+                                <TouchableOpacity key={banner} activeOpacity={0.75}>
+                                    <Image
+                                        style={styles.bannerImage}
+                                        source={{uri: banner}}
+                                    />
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </Swiper>
+                </View>
+            )
+        } else {
+            <View><Text>helo</Text></View>
+        }
+    }
+
+    _onRefresh(){
+
+    }
+
+    _onEndReach(){
+
+    }
+
+    _renderFooter(){
+
+    }
+    _onScroll(){
+
     }
 }
 
@@ -187,7 +161,34 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgb(228, 229, 230)',
     },
-
+    listViewStyle:{
+        // 主轴方向
+        flexDirection:'row',
+        // 一行显示不下,换一行
+        flexWrap:'wrap',
+        // 侧轴方向
+        alignItems:'center', // 必须设置,否则换行不起作用
+    },
+    customDot: {
+        backgroundColor: '#ccc',
+        height: 1.5,
+        width: 15,
+        marginLeft: 2,
+        marginRight: 2,
+        marginTop: 2,
+    },
+    bannerImage: {
+        height: 200,
+        width: Common.window.width,
+    },
+    customActiveDot: {
+        backgroundColor: 'white',
+        height: 1.5,
+        width: 15,
+        marginLeft: 2,
+        marginRight: 2,
+        marginTop: 2,
+    },
     scrollView: {
         height: Common.window.height - 64 - 40,
         paddingTop: 25,

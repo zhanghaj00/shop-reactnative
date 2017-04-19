@@ -44,6 +44,11 @@ export const kProductViewReceived               = 'kProductViewReceived';
 export const kArticleView                       = 'kArticleView';
 export const kArticleViewReceived               = 'kArticleViewReceived';
 
+//详情
+export const FOOD_INFO_RECEIVE_FOOD             = 'foodInfoReceiveFood';
+export const FOOD_INFO_FETCH_FOOD               = 'foodInfoFetchFood';
+export const FOOD_INFO_CHANGE_SHOW_UNITS_STATUS = 'foodInfoChangeShowUnitsStatus';
+
 //购物车
 export const kAppCartCookieIdFromSync           = 'kAppCartCookieIdFromSync'; //同步加载数据, 一般从缓存加载
 export const kCartNumFromSync                   = 'kCartNumFromSync'; //同步加载数据, 一般从商品详情页

@@ -64,7 +64,7 @@ export default class MyPage extends Component {
 
     render() {
         const {userReducer} = this.props;
-        const user = userReducer.user;
+        const user = userReducer.phoneId;
 
         return (
             <View style={styles.container}>
@@ -79,12 +79,12 @@ export default class MyPage extends Component {
                             style={styles.loginWrap}
                             onPress={this._onPressHead.bind(this)}
                         >
-                            {user.avatar ?
+                            {userReducer.isLoggedIn ?
                                 <Image style={styles.headIcon} source={{uri:user.avatar}}/> :
                                 <Image style={styles.headIcon} source={require('../images/img_default_head.png')}/>
                             }
-                            {user.id ?
-                                <Text style={styles.login}>{user.mobile}</Text> :
+                            {userReducer.isLoggedIn ?
+                                <Text style={styles.login}>{userReducer.phoneId}</Text> :
                                 <Text style={styles.login}>点击登录</Text>
                             }
                         </TouchableOpacity>

@@ -12,7 +12,6 @@ import * as types from '../actions/actionTypes';
 const initialState = {
     cartItems: [],
     cart_num: 0,
-    app_cart_cookie_id: '',
     isLoading: true,
 };
 

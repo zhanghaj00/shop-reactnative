@@ -49,7 +49,7 @@ export let categoryListWithProduct = (isLoading) => {
  * @param isLoading
  * @returns {function(*)}
  */
-export let productView = (product_id, app_cart_cookie_id, access_token) => {
+export let productView = (product_id, phoneId) => {
     let URL = urls.kUrlGoodInfo + urls.kUrlCommonParam + "&foodId=" + product_id;
     return (dispatch) => {
         dispatch({'type': types.kProductView, 'isLoading':true});

@@ -21,15 +21,13 @@ import {
 import Toast from 'react-native-root-toast';
 import Header from '../components/Header';
 import {userRegister} from '../actions/userActions';
-
+import MyContainer from '../containers/MyContainer';
 export default class RegisterPage extends Component {
     constructor(props){
         super(props);
         this.state = {
             mobile: '',
             password: '',
-            code:'',
-            verifyCodeText:'获取验证码',
             user:{},
         };
         this.timer = null;
@@ -47,7 +45,7 @@ export default class RegisterPage extends Component {
     componentWillUpdate(nextProps, nextState){
         InteractionManager.runAfterInteractions(() => {
             const {userReducer} = this.props;
-            if(userReducer.user.id){
+            if(userReducer.isLoggedIn){
                 this.props.navigator.popToTop();
             }
             if (!userReducer.isLoading && userReducer.status == false) {
@@ -80,18 +78,6 @@ export default class RegisterPage extends Component {
                         secureTextEntry={true}
                         placeholder='请设置密码'
                         onChangeText={this._onChangePassword.bind(this)} />
-                </View>
-                <View style={[styles.formInput, styles.formInputSplit]}>
-                    <Image source={require('../images/passicon.png')} style={{width:25,height:25,resizeMode: 'contain'}}/>
-                    <TextInput
-                        ref="login_psw"
-                        style={styles.loginInput}
-                        secureTextEntry={true}
-                        placeholder='请输入验证码: 8888'
-                        onChangeText={this._onChangeCode.bind(this)} />
-                    <TouchableOpacity style={styles.verifyCodeBtn} onPress={this._sendVerifyCode.bind(this)}>
-                        <Text ref="btnSendVCode" style={styles.verifyCodeText}>{this.state.verifyCodeText}</Text>
-                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.registerBtn} onPress={this._register.bind(this)}>
                     <Text style={styles.registerText}>注册</Text>
@@ -140,7 +126,7 @@ export default class RegisterPage extends Component {
 
     _register(){
         let {mobile, password, code} = this.state;
-
+        let {userReducer} = this.props;
         if (!mobile.length) {
             Toast.show('请输入正确的手机号', {position:Toast.positions.CENTER});
             return;
@@ -149,14 +135,17 @@ export default class RegisterPage extends Component {
             Toast.show('密码必须大于6位', {position:Toast.positions.CENTER});
             return;
         }
-        if (!code.length) {
-            Toast.show('请输入验证码', {position:Toast.positions.CENTER});
-            return;
-        }
 
         InteractionManager.runAfterInteractions(() => {
             const {dispatch} = this.props;
             dispatch(userRegister(mobile, password, code));
+            /*if(userReducer.isLoggedIn){
+                this.props.navigator.push({
+                    name: 'MyContainer',
+                    component: MyContainer,
+                    passProps: {...this.props, isShowNavigator:true}
+                })
+            }*/
         });
     };
 }

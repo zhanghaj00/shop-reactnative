@@ -11,19 +11,24 @@
 import * as types from './actionTypes';
 import Util from '../common/utils';
 
+import * as urls from '../common/constants_url';
+
 export let fetchFoodInfo = (foodCode)=> {
 
-    let URL = `http://food.boohee.com/fb/v1/foods/${foodCode}/mode_show`;
+    let URL = urls.kUrlGoodInfo + urls.kUrlCommonParam + "&foodId=" + foodCode;
 
     return dispatch => {
         dispatch(fetchFood());
-        
-        Util.get(URL, (response) => {
-            dispatch(receiveFood(response));
-        }, (error) => {alert(error)
-            console.log(`Fetch food info error: ${error}`);
-            dispatch(receiveFood({}))
-        })
+        fetch(URL)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = JSON.parse(responseText);
+                dispatch(receiveFood(result.food));
+            })
+            .catch((err) => {
+                dispatch(receiveFood({}))
+            });
+
     }
 }
 

@@ -21,5 +21,5 @@ class PreorderContainer extends Component {
 }
 
 export default connect((state) => {
-    return { preorderReducer, orderReducer, userReducer, commonReducer} = state;
+    return { preorderReducer, orderReducer, userReducer, commonReducer,addressReducer} = state;
 })(PreorderContainer);
