@@ -9,6 +9,7 @@ export function alipay(opt) {
     return (dispatch) => {
         var xhr =  new XMLHttpRequest();
         let appScheme = 'reactnativecomponentdemo'
+        //tets
         //let server_api_url = '获取支付宝参数信息的服务器接口url地址'
         //let params = '提交的参数, 例如订单号信息'
         //let appScheme = 'ios对应URL Types中的URL Schemes的值, 会影响支付成功后是否能正确的返回app'
